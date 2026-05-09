@@ -32,7 +32,9 @@ body,
 }
 
 body {
-  background: rgb(var(--bg));
+  /* Transparent so the macOS sidebar vibrancy material can show through.
+     Opaque areas (top bar, preview pane, welcome screen) set their own bg. */
+  background: transparent;
   color: rgb(var(--fg));
   font-family: theme("fontFamily.sans");
   -webkit-font-smoothing: antialiased;

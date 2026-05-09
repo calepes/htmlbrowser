@@ -23,8 +23,8 @@
         "titleBarStyle": "Overlay",
         "trafficLightPosition": { "x": 18, "y": 22 },
         "windowEffects": {
-          "effects": ["hudWindow"],
-          "state": "active"
+          "effects": ["sidebar"],
+          "state": "followsWindowActiveState"
         }
       }
     ],
