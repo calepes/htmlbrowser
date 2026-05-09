@@ -27,7 +27,7 @@ export function Preview() {
     if (!el) return;
     let raf = 0;
     const update = () => {
-      if (overlayHidden) {
+      if (overlayHidden || !selectedFile) {
         void invoke("update_preview_bounds", {
           label: PREVIEW_LABEL,
           x: 0,
@@ -59,9 +59,10 @@ export function Preview() {
       ro.disconnect();
       window.removeEventListener("resize", schedule);
     };
-  }, [showJsBlockedBanner, overlayHidden]);
+  }, [showJsBlockedBanner, overlayHidden, selectedFile]);
 
   useEffect(() => {
+    if (!selectedFile) return;
     void invoke("show_preview", {
       label: PREVIEW_LABEL,
       file: selectedFile,
