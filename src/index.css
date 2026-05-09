@@ -4,8 +4,8 @@
 
 :root {
   --bg: 8 8 10;
-  --bg-subtle: 12 12 14;
-  --bg-muted: 26 26 30;
+  --bg-subtle: 19 19 19;
+  --bg-muted: 30 30 30;
   --bg-selected: 30 30 34;
   --fg: 245 245 247;
   --fg-warm: 232 228 218;

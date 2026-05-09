@@ -14,7 +14,7 @@ export function Sidebar() {
 
   if (!root) {
     return (
-      <aside className="flex h-full w-64 shrink-0 flex-col border-r border-border bg-bg">
+      <aside className="flex h-full w-64 shrink-0 flex-col border-r border-border bg-bg-subtle">
         <div className="px-4 py-3 font-mono text-[11px] uppercase tracking-wider text-fg-subtle">
           Workspace
         </div>
@@ -26,7 +26,7 @@ export function Sidebar() {
   }
 
   return (
-    <aside className="flex h-full w-64 shrink-0 flex-col border-r border-border bg-bg">
+    <aside className="flex h-full w-64 shrink-0 flex-col border-r border-border bg-bg-subtle">
       <div className="flex-1 overflow-y-auto px-2 py-3">
         {sorted.length === 0 ? (
           <div className="px-3 py-4 font-mono text-[13px] text-fg-muted">
