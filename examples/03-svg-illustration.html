@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>03 · Inline SVG</title>
+    <style>
+      body {
+        margin: 0;
+        background: #fafaf7;
+        color: #1a1a1a;
+        font-family: -apple-system, ui-sans-serif, system-ui, sans-serif;
+        padding: 48px;
+      }
+      .wrap { max-width: 720px; margin: 0 auto; }
+      h1 { margin: 0 0 24px; font-size: 28px; }
+      .meta { color: #666; font-size: 13px; margin-bottom: 32px; }
+      svg { display: block; max-width: 100%; }
+      .row { display: flex; gap: 24px; flex-wrap: wrap; align-items: center; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>Inline SVG (no JS)</h1>
+      <div class="meta">SVG renders directly from markup. Works in Safe and Trusted.</div>
+
+      <div class="row">
+        <svg width="160" height="160" viewBox="0 0 160 160">
+          <defs>
+            <radialGradient id="g1" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#22c55e" />
+              <stop offset="100%" stop-color="#0c4a2a" />
+            </radialGradient>
+          </defs>
+          <circle cx="80" cy="80" r="70" fill="url(#g1)" />
+          <path d="M50 80 L72 102 L112 60" stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+        </svg>
+
+        <svg width="160" height="160" viewBox="0 0 160 160">
+          <rect x="20" y="20" width="120" height="120" rx="20" fill="#1a1a1a" />
+          <text x="80" y="92" font-family="ui-monospace, Menlo, monospace" font-size="36" font-weight="700" fill="#22c55e" text-anchor="middle">&lt;/&gt;</text>
+        </svg>
+
+        <svg width="200" height="60" viewBox="0 0 200 60">
+          <polyline points="0,40 30,20 60,30 90,10 120,25 150,5 200,15" stroke="#22c55e" stroke-width="2.5" fill="none" />
+          <line x1="0" y1="50" x2="200" y2="50" stroke="#ddd" stroke-width="1" />
+        </svg>
+      </div>
+    </div>
+  </body>
+</html>

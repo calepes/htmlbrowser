@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>01 · Static HTML</title>
+    <style>
+      :root { color-scheme: light dark; }
+      body {
+        margin: 0;
+        font-family: -apple-system, ui-sans-serif, system-ui, sans-serif;
+        background: #fafaf7;
+        color: #1a1a1a;
+        line-height: 1.6;
+        padding: 48px;
+      }
+      .wrap { max-width: 720px; margin: 0 auto; }
+      h1 { font-size: 32px; margin: 0 0 8px; letter-spacing: -0.02em; }
+      .meta { color: #666; font-size: 13px; margin-bottom: 32px; }
+      .badge {
+        display: inline-block;
+        padding: 2px 8px;
+        background: #16a34a;
+        color: white;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      pre {
+        background: #f0eee8;
+        padding: 16px;
+        border-radius: 8px;
+        overflow-x: auto;
+        font-size: 13px;
+      }
+      ul li { margin: 6px 0; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <span class="badge">Static</span>
+      <h1>Pure Static HTML</h1>
+      <div class="meta">No JS. No external resources. Should render identically in Safe and Trusted.</div>
+
+      <p>This page tests the baseline: HTML + inline CSS, nothing else. If anything in the app shell prevents this from rendering correctly, that's a bug.</p>
+
+      <h2>Checklist</h2>
+      <ul>
+        <li>Headings, paragraphs, lists render</li>
+        <li>Inline <code>&lt;style&gt;</code> applies</li>
+        <li>System font stack resolves</li>
+      </ul>
+
+      <pre>console.log("This block is just text — no JS runs");</pre>
+    </div>
+  </body>
+</html>

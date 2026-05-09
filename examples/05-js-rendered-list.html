@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>05 · JS-rendered List</title>
+    <style>
+      body {
+        margin: 0;
+        background: #fafaf7;
+        color: #1a1a1a;
+        font-family: -apple-system, ui-sans-serif, system-ui, sans-serif;
+        padding: 32px 48px;
+      }
+      h1 { margin: 0 0 8px; font-size: 28px; letter-spacing: -0.02em; }
+      .meta { color: #666; font-size: 13px; margin-bottom: 24px; }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 12px;
+      }
+      .card {
+        background: white;
+        border: 1px solid #e5e5e0;
+        border-radius: 8px;
+        padding: 14px 16px;
+      }
+      .card h3 { margin: 0 0 4px; font-size: 14px; font-weight: 600; }
+      .card .price { color: #16a34a; font-weight: 700; font-size: 18px; font-variant-numeric: tabular-nums; }
+      .empty {
+        background: #fee2e2;
+        color: #991b1b;
+        border: 1px solid #fecaca;
+        padding: 16px;
+        border-radius: 8px;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>JS-rendered List</h1>
+    <div class="meta">The grid below is populated by JavaScript. In Safe mode it stays empty (with a fallback hint). In Trusted mode you'll see 12 cards.</div>
+
+    <div id="grid" class="grid">
+      <div class="empty">JavaScript did not run. Switch to Trusted mode in the top bar.</div>
+    </div>
+
+    <script>
+      const items = Array.from({ length: 12 }, (_, i) => ({
+        name: ["Espresso", "Cortado", "Flat White", "Latte", "Cappuccino", "Macchiato", "Americano", "Mocha", "Affogato", "Long Black", "Iced Latte", "Cold Brew"][i],
+        price: (3 + i * 0.5).toFixed(2),
+      }));
+      const grid = document.getElementById("grid");
+      grid.innerHTML = items.map(it => `
+        <div class="card">
+          <h3>${it.name}</h3>
+          <span class="price">$${it.price}</span>
+        </div>
+      `).join("");
+    </script>
+  </body>
+</html>

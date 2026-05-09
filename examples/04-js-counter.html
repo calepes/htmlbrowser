@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>04 · JS Counter</title>
+    <style>
+      body {
+        margin: 0;
+        background: #0c0c0e;
+        color: #f5f5f7;
+        font-family: -apple-system, ui-sans-serif, system-ui, sans-serif;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+      }
+      .panel {
+        text-align: center;
+      }
+      h1 { margin: 0 0 8px; font-size: 24px; font-weight: 600; }
+      .meta { color: #888; font-size: 13px; margin-bottom: 32px; }
+      .count {
+        font-family: ui-monospace, Menlo, monospace;
+        font-size: 96px;
+        font-weight: 700;
+        color: #22c55e;
+        margin: 16px 0 24px;
+        line-height: 1;
+      }
+      button {
+        font: inherit;
+        padding: 10px 20px;
+        margin: 0 6px;
+        background: #1a1a1d;
+        color: #f5f5f7;
+        border: 1px solid #2a2a2e;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+      button:hover { background: #2a2a2e; }
+    </style>
+  </head>
+  <body>
+    <div class="panel">
+      <h1>Tiny JS Counter</h1>
+      <div class="meta">If the count below stays at <strong>0</strong> when clicking, JS is blocked (Safe mode).</div>
+      <div class="count" id="count">0</div>
+      <button id="dec">−</button>
+      <button id="reset">Reset</button>
+      <button id="inc">+</button>
+    </div>
+
+    <script>
+      let n = 0;
+      const out = document.getElementById("count");
+      const render = () => { out.textContent = String(n); };
+      document.getElementById("inc").addEventListener("click", () => { n += 1; render(); });
+      document.getElementById("dec").addEventListener("click", () => { n -= 1; render(); });
+      document.getElementById("reset").addEventListener("click", () => { n = 0; render(); });
+    </script>
+  </body>
+</html>

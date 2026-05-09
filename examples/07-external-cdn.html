@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>07 · External CDN</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-zinc-950 text-zinc-100" style="font-family: 'Inter', system-ui, sans-serif">
+    <div class="max-w-3xl mx-auto px-12 py-16">
+      <span class="inline-block px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 text-xs font-mono uppercase tracking-wider">External</span>
+      <h1 class="text-4xl font-extrabold mt-3 mb-2 tracking-tight">External CDN resources</h1>
+      <p class="text-zinc-400 mb-6">
+        This page pulls Inter from Google Fonts and Tailwind from <code class="text-zinc-200">cdn.tailwindcss.com</code>.
+        In <strong class="text-amber-400">Safe</strong> mode, both are blocked by CSP — you'll see system font and unstyled HTML.
+        In <strong class="text-emerald-400">Trusted</strong> mode, both load and the page becomes nicely styled.
+      </p>
+
+      <div class="grid grid-cols-3 gap-3 mt-6">
+        <div class="rounded-lg bg-zinc-900 border border-zinc-800 p-4">
+          <div class="text-xs text-zinc-500 uppercase tracking-wider">Font</div>
+          <div class="text-lg font-semibold mt-1">Inter</div>
+        </div>
+        <div class="rounded-lg bg-zinc-900 border border-zinc-800 p-4">
+          <div class="text-xs text-zinc-500 uppercase tracking-wider">CSS</div>
+          <div class="text-lg font-semibold mt-1">Tailwind CDN</div>
+        </div>
+        <div class="rounded-lg bg-zinc-900 border border-zinc-800 p-4">
+          <div class="text-xs text-zinc-500 uppercase tracking-wider">Mode</div>
+          <div class="text-lg font-semibold mt-1 text-emerald-400">Trusted only</div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

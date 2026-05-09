@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>06 · Inline Event Handlers</title>
+    <style>
+      body {
+        margin: 0;
+        background: #fafaf7;
+        color: #1a1a1a;
+        font-family: -apple-system, ui-sans-serif, system-ui, sans-serif;
+        padding: 48px;
+      }
+      .wrap { max-width: 640px; margin: 0 auto; }
+      h1 { margin: 0 0 8px; }
+      .meta { color: #666; font-size: 13px; margin-bottom: 24px; }
+      .row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+      button {
+        font: inherit;
+        padding: 8px 16px;
+        background: #1a1a1d;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+      .out {
+        margin-top: 24px;
+        padding: 16px;
+        background: white;
+        border: 1px solid #e5e5e0;
+        border-radius: 8px;
+        font-family: ui-monospace, Menlo, monospace;
+        font-size: 13px;
+        min-height: 24px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>Inline event handlers</h1>
+      <div class="meta">
+        Buttons use <code>onclick="..."</code> attributes. CSP <code>script-src 'none'</code> blocks these even though there is no <code>&lt;script&gt;</code> tag — so the inspector correctly flags this file too.
+      </div>
+
+      <div class="row">
+        <button onclick="document.getElementById('out').textContent = 'Clicked at ' + new Date().toLocaleTimeString()">Click me</button>
+        <button onclick="document.getElementById('out').textContent = ''">Clear</button>
+      </div>
+      <div id="out" class="out">No clicks yet.</div>
+    </div>
+  </body>
+</html>
