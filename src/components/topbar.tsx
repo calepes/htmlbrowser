@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { open as openDialog } from "@tauri-apps/plugin-dialog";
 import { openExternalPath } from "@/lib/tauri";
+import { checkForUpdates } from "@/hooks/use-updater";
 import { useWorkspaceStore } from "@/store/workspace";
 import { useSettingsStore } from "@/store/settings";
 import { usePreviewStore } from "@/store/preview";
@@ -50,6 +51,11 @@ export function TopBar() {
     if (typeof picked === "string") {
       await openWorkspace(picked);
     }
+  }
+
+  async function checkUpdates() {
+    setMenuOpen(false);
+    await checkForUpdates({ notifyWhenUpToDate: true });
   }
 
   async function chooseRecent(path: string) {
@@ -102,6 +108,7 @@ export function TopBar() {
               onChoose={chooseRecent}
               onPick={pickFolder}
               onRemove={(p) => removeRecent(p)}
+              onCheckUpdates={checkUpdates}
             />
           )}
         </div>
@@ -171,12 +178,14 @@ function WorkspaceMenu({
   onChoose,
   onPick,
   onRemove,
+  onCheckUpdates,
 }: {
   currentRoot: string | null;
   recents: string[];
   onChoose: (path: string) => void;
   onPick: () => void;
   onRemove: (path: string) => void;
+  onCheckUpdates: () => void;
 }) {
   return (
     <div className="absolute left-1/2 top-full z-50 mt-2 w-80 -translate-x-1/2 rounded-lg border border-white/10 bg-bg-subtle/95 p-1 shadow-2xl backdrop-blur-md">
@@ -237,6 +246,14 @@ function WorkspaceMenu({
       >
         <PlusIcon />
         Open folder…
+      </button>
+      <div className="my-1 h-px bg-white/5" />
+      <button
+        type="button"
+        onClick={onCheckUpdates}
+        className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-[13px] text-fg-muted hover:bg-white/5 hover:text-fg-warm"
+      >
+        Check for updates…
       </button>
     </div>
   );

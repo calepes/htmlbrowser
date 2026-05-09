@@ -6,6 +6,7 @@ import { Welcome } from "@/components/welcome";
 import { useWorkspaceStore } from "@/store/workspace";
 import { useSettingsStore } from "@/store/settings";
 import { useFileWatcher } from "@/hooks/use-file-watcher";
+import { useUpdaterOnLaunch } from "@/hooks/use-updater";
 
 export function App() {
   const root = useWorkspaceStore((s) => s.root);
@@ -21,6 +22,7 @@ export function App() {
   }, [root, loadSettings]);
 
   useFileWatcher();
+  useUpdaterOnLaunch();
 
   if (!root) {
     return (
