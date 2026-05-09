@@ -29,6 +29,7 @@ pub fn run() {
             commands::preview::show_preview,
             commands::preview::update_preview_bounds,
             commands::system::reveal_in_finder,
+            commands::system::open_external,
         ])
         .setup(|app| {
             // Force the main window to show; on macOS the transparent +

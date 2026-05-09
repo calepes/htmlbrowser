@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { open as openDialog } from "@tauri-apps/plugin-dialog";
-import { openPath } from "@tauri-apps/plugin-opener";
+import { openExternalPath } from "@/lib/tauri";
 import { useWorkspaceStore } from "@/store/workspace";
 import { useSettingsStore } from "@/store/settings";
 import { usePreviewStore } from "@/store/preview";
@@ -65,7 +65,11 @@ export function TopBar() {
 
   async function openExternal() {
     if (!selectedFile) return;
-    await openPath(selectedFile);
+    try {
+      await openExternalPath(selectedFile);
+    } catch (err) {
+      console.error("openExternal failed:", err);
+    }
   }
 
   const title = root ? basename(root) : "htmlbrowser.dev";

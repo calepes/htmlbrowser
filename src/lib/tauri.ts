@@ -51,6 +51,10 @@ export function revealInFinder(path: string): Promise<void> {
   return invoke("reveal_in_finder", { path });
 }
 
+export function openExternalPath(path: string): Promise<void> {
+  return invoke("open_external", { path });
+}
+
 /** Build a `htmlartifact://` URL for a file in the active workspace. */
 export function artifactUrl(path: string): string {
   // Tauri v2 normalizes custom protocols to <scheme>://localhost/<...> on macOS.
