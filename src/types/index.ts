@@ -1,0 +1,38 @@
+export type DirEntryKind = "file" | "directory";
+
+export interface DirEntry {
+  name: string;
+  path: string;
+  kind: DirEntryKind;
+  /** Only present for files. Undefined for directories. */
+  modifiedMs?: number;
+  /** Children loaded lazily for directories. */
+  children?: DirEntry[];
+}
+
+export interface WorkspaceTree {
+  root: string;
+  entries: DirEntry[];
+}
+
+export type TrustMode = "safe" | "trusted";
+
+export interface WorkspaceSettings {
+  trustMode: TrustMode;
+}
+
+export interface StartupBundle {
+  recentWorkspaces: string[];
+  lastWorkspace: string | null;
+}
+
+export interface FileChangeEvent {
+  workspace: string;
+  path: string;
+  kind: "modified" | "created" | "removed" | "renamed";
+}
+
+export interface DirectoryChangeEvent {
+  workspace: string;
+  path: string;
+}

@@ -1,0 +1,43 @@
+# Node
+node_modules
+dist
+dist-ssr
+*.log
+.npm
+.pnpm-store
+.pnpm-debug.log*
+.yarn
+.parcel-cache
+.eslintcache
+
+# Vite
+.vite
+
+# TypeScript
+*.tsbuildinfo
+vite.config.d.ts
+vite.config.js
+
+# Editors
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+
+# Tauri
+src-tauri/target
+src-tauri/gen
+src-tauri/Cargo.lock
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# Misc
+*.pem
+*.local
