@@ -47,8 +47,8 @@ export function TopBar() {
 
       <div className="flex items-center gap-2">
         {root && (
-          <div className="flex items-center gap-1.5 px-2 font-mono text-[11px] uppercase tracking-wider text-emerald-700">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgb(34_197_94_/_0.7)]" />
+          <div className="flex items-center gap-1.5 px-2 font-mono text-[11px] uppercase tracking-wider text-accent">
+            <span className="h-1.5 w-1.5 rounded-full bg-accent shadow-[0_0_8px_rgb(var(--accent))]" />
             Live
           </div>
         )}
@@ -59,8 +59,8 @@ export function TopBar() {
             className={
               "rounded-md border px-2.5 py-1 font-mono text-[11px] uppercase tracking-wider transition-colors " +
               (trustMode === "trusted"
-                ? "border-amber-600/40 bg-amber-500/15 text-amber-700 hover:bg-amber-500/25"
-                : "border-border-topbar bg-bg-topbar text-fg-topbar-muted hover:bg-black/5 hover:text-fg-topbar")
+                ? "border-warn/40 bg-warn/15 text-warn hover:bg-warn/25"
+                : "border-border-topbar bg-bg-topbar text-fg-topbar-muted hover:bg-white/5 hover:text-fg-topbar")
             }
             title={
               trustMode === "trusted"
@@ -118,7 +118,7 @@ function IconButton({
       onClick={onClick}
       title={title}
       aria-label={label}
-      className="flex h-7 w-7 items-center justify-center rounded-md border border-border-topbar bg-bg-topbar text-fg-topbar-muted transition-colors hover:bg-black/5 hover:text-fg-topbar"
+      className="flex h-7 w-7 items-center justify-center rounded-md border border-border-topbar bg-bg-topbar text-fg-topbar-muted transition-colors hover:bg-white/5 hover:text-fg-topbar"
     >
       {children}
     </button>
