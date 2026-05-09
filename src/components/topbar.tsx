@@ -35,10 +35,10 @@ export function TopBar() {
   return (
     <div
       data-tauri-drag-region
-      className="relative flex h-14 shrink-0 items-center border-b border-border-topbar bg-bg-topbar pl-24 pr-4"
+      className="relative flex h-14 shrink-0 items-center border-b border-border pl-24 pr-4"
     >
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-        <span className="font-mono text-[13px] tracking-tight text-fg-topbar">
+        <span className="font-mono text-[13px] tracking-tight text-fg-warm">
           {title}
         </span>
       </div>
@@ -60,7 +60,7 @@ export function TopBar() {
               "rounded-md border px-2.5 py-1 font-mono text-[11px] uppercase tracking-wider transition-colors " +
               (trustMode === "trusted"
                 ? "border-warn/40 bg-warn/15 text-warn hover:bg-warn/25"
-                : "border-border-topbar bg-bg-topbar text-fg-topbar-muted hover:bg-white/5 hover:text-fg-topbar")
+                : "border-white/10 bg-white/5 text-fg-muted hover:bg-white/10 hover:text-fg-warm")
             }
             title={
               trustMode === "trusted"
@@ -118,7 +118,7 @@ function IconButton({
       onClick={onClick}
       title={title}
       aria-label={label}
-      className="flex h-7 w-7 items-center justify-center rounded-md border border-border-topbar bg-bg-topbar text-fg-topbar-muted transition-colors hover:bg-white/5 hover:text-fg-topbar"
+      className="flex h-7 w-7 items-center justify-center rounded-md border border-white/10 bg-white/5 text-fg-muted transition-colors hover:bg-white/10 hover:text-fg-warm"
     >
       {children}
     </button>
