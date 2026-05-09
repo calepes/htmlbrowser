@@ -37,7 +37,7 @@
       "endpoints": [
         "https://github.com/maail/htmlbrowser.dev/releases/latest/download/latest.json"
       ],
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDZFQjlCOTQxQjRDNzc1MTUKUldRVmRjZTBRYm01YnBxcUVtcGpDYVZiaXZkcHpoZkw1WHZocWU5NFFTYlRjOWdtRGUwOEFvOHkK",
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEJDQzE3M0Q3M0Y3RTVEODAKUldTQVhYNC8xM1BCdk8zWWFLaWZrYnpHK2EzZVZIWEpGbFo5bU1DYk9pb2p6aGJqOEhyWCtxMVQK",
       "windows": {
         "installMode": "passive"
       }
