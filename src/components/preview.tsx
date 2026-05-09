@@ -17,6 +17,7 @@ export function Preview() {
   const setTrustMode = useSettingsStore((s) => s.setTrustMode);
   const reloadToken = usePreviewStore((s) => s.reloadToken);
   const bumpReload = usePreviewStore((s) => s.bumpReload);
+  const overlayHidden = usePreviewStore((s) => s.overlayHidden);
 
   const showJsBlockedBanner =
     !!selectedFile && trustMode === "safe" && selectedFileHasScripts;
@@ -26,6 +27,16 @@ export function Preview() {
     if (!el) return;
     let raf = 0;
     const update = () => {
+      if (overlayHidden) {
+        void invoke("update_preview_bounds", {
+          label: PREVIEW_LABEL,
+          x: 0,
+          y: 0,
+          width: 0,
+          height: 0,
+        });
+        return;
+      }
       const rect = el.getBoundingClientRect();
       void invoke("update_preview_bounds", {
         label: PREVIEW_LABEL,
@@ -48,7 +59,7 @@ export function Preview() {
       ro.disconnect();
       window.removeEventListener("resize", schedule);
     };
-  }, [showJsBlockedBanner]);
+  }, [showJsBlockedBanner, overlayHidden]);
 
   useEffect(() => {
     void invoke("show_preview", {

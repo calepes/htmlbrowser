@@ -14,9 +14,17 @@ export function TopBar() {
   const trustMode = useSettingsStore((s) => s.trustMode);
   const setTrustMode = useSettingsStore((s) => s.setTrustMode);
   const bumpReload = usePreviewStore((s) => s.bumpReload);
+  const setOverlayHidden = usePreviewStore((s) => s.setOverlayHidden);
 
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+
+  // Collapse the native preview webview while the dropdown is showing so it
+  // doesn't paint over the menu (native views always sit above HTML).
+  useEffect(() => {
+    setOverlayHidden(menuOpen);
+    return () => setOverlayHidden(false);
+  }, [menuOpen, setOverlayHidden]);
 
   useEffect(() => {
     if (!menuOpen) return;
