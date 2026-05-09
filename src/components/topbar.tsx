@@ -35,10 +35,10 @@ export function TopBar() {
   return (
     <div
       data-tauri-drag-region
-      className="relative flex h-14 shrink-0 items-center border-b border-border bg-bg pl-24 pr-4"
+      className="relative flex h-14 shrink-0 items-center border-b border-border-topbar bg-bg-topbar pl-24 pr-4"
     >
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-        <span className="font-mono text-[13px] tracking-tight text-fg-warm">
+        <span className="font-mono text-[13px] tracking-tight text-fg-topbar">
           {title}
         </span>
       </div>
@@ -47,8 +47,8 @@ export function TopBar() {
 
       <div className="flex items-center gap-2">
         {root && (
-          <div className="flex items-center gap-1.5 px-2 text-[11px] font-mono uppercase tracking-wider text-accent">
-            <span className="h-1.5 w-1.5 rounded-full bg-accent shadow-[0_0_8px_rgb(var(--accent))]" />
+          <div className="flex items-center gap-1.5 px-2 font-mono text-[11px] uppercase tracking-wider text-emerald-700">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgb(34_197_94_/_0.7)]" />
             Live
           </div>
         )}
@@ -57,10 +57,10 @@ export function TopBar() {
             type="button"
             onClick={toggleTrust}
             className={
-              "rounded-md border px-2.5 py-1 text-[11px] font-mono uppercase tracking-wider transition-colors " +
+              "rounded-md border px-2.5 py-1 font-mono text-[11px] uppercase tracking-wider transition-colors " +
               (trustMode === "trusted"
-                ? "border-warn/40 bg-warn/10 text-warn"
-                : "border-border bg-bg-subtle text-fg-muted hover:bg-bg-muted hover:text-fg")
+                ? "border-amber-600/40 bg-amber-500/15 text-amber-700 hover:bg-amber-500/25"
+                : "border-border-topbar bg-bg-topbar text-fg-topbar-muted hover:bg-black/5 hover:text-fg-topbar")
             }
             title={
               trustMode === "trusted"
@@ -118,7 +118,7 @@ function IconButton({
       onClick={onClick}
       title={title}
       aria-label={label}
-      className="flex h-7 w-7 items-center justify-center rounded-md border border-border bg-bg-subtle text-fg-muted hover:bg-bg-muted hover:text-fg"
+      className="flex h-7 w-7 items-center justify-center rounded-md border border-border-topbar bg-bg-topbar text-fg-topbar-muted transition-colors hover:bg-black/5 hover:text-fg-topbar"
     >
       {children}
     </button>

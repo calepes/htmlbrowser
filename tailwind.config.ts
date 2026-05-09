@@ -29,16 +29,22 @@ export default {
           subtle: "rgb(var(--bg-subtle) / <alpha-value>)",
           muted: "rgb(var(--bg-muted) / <alpha-value>)",
           selected: "rgb(var(--bg-selected) / <alpha-value>)",
+          topbar: "rgb(var(--bg-topbar) / <alpha-value>)",
         },
         fg: {
           DEFAULT: "rgb(var(--fg) / <alpha-value>)",
           warm: "rgb(var(--fg-warm) / <alpha-value>)",
           muted: "rgb(var(--fg-muted) / <alpha-value>)",
           subtle: "rgb(var(--fg-subtle) / <alpha-value>)",
+          topbar: {
+            DEFAULT: "rgb(var(--fg-topbar) / <alpha-value>)",
+            muted: "rgb(var(--fg-topbar-muted) / <alpha-value>)",
+          },
         },
         border: {
           DEFAULT: "rgb(var(--border) / <alpha-value>)",
           strong: "rgb(var(--border-strong) / <alpha-value>)",
+          topbar: "rgb(var(--border-topbar) / <alpha-value>)",
         },
         accent: {
           DEFAULT: "rgb(var(--accent) / <alpha-value>)",
