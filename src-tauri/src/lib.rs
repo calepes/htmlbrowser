@@ -23,6 +23,7 @@ pub fn run() {
             commands::workspace::remove_recent_workspace,
             commands::fs::read_directory,
             commands::fs::read_workspace_file,
+            commands::fs::inspect_html,
             commands::settings::get_trust_mode,
             commands::settings::set_trust_mode,
             commands::preview::show_preview,

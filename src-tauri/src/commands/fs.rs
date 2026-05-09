@@ -100,3 +100,33 @@ pub async fn read_directory(path: PathBuf) -> Vec<DirEntryDto> {
 pub async fn read_workspace_file(path: PathBuf) -> Result<String, String> {
     std::fs::read_to_string(&path).map_err(|e| e.to_string())
 }
+
+#[derive(Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct HtmlInspection {
+    pub has_scripts: bool,
+    pub has_external_resources: bool,
+}
+
+const INSPECT_LIMIT: usize = 2 * 1024 * 1024;
+
+#[tauri::command]
+pub async fn inspect_html(path: PathBuf) -> Result<HtmlInspection, String> {
+    let bytes = std::fs::read(&path).map_err(|e| e.to_string())?;
+    let slice: &[u8] = if bytes.len() > INSPECT_LIMIT {
+        &bytes[..INSPECT_LIMIT]
+    } else {
+        &bytes
+    };
+    let lower = String::from_utf8_lossy(slice).to_ascii_lowercase();
+    let has_scripts = lower.contains("<script")
+        || lower.contains(" onclick=")
+        || lower.contains(" onload=")
+        || lower.contains(" onchange=")
+        || lower.contains(" onsubmit=");
+    let has_external_resources = lower.contains("https://") || lower.contains("http://");
+    Ok(HtmlInspection {
+        has_scripts,
+        has_external_resources,
+    })
+}

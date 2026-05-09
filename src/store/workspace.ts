@@ -6,6 +6,7 @@ interface WorkspaceState {
   root: string | null;
   entries: DirEntry[];
   selectedFile: string | null;
+  selectedFileHasScripts: boolean;
   expandedDirs: Set<string>;
   recentWorkspaces: string[];
   isLoading: boolean;
@@ -13,7 +14,7 @@ interface WorkspaceState {
   hydrate: () => Promise<void>;
   openWorkspace: (root: string) => Promise<void>;
   closeWorkspace: () => void;
-  selectFile: (path: string | null) => void;
+  selectFile: (path: string | null) => Promise<void>;
   toggleDirectory: (path: string) => void;
   refresh: () => Promise<void>;
   removeRecent: (root: string) => Promise<void>;
@@ -23,6 +24,7 @@ export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
   root: null,
   entries: [],
   selectedFile: null,
+  selectedFileHasScripts: false,
   expandedDirs: new Set(),
   recentWorkspaces: [],
   isLoading: false,
@@ -49,6 +51,7 @@ export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
         entries: tree.entries,
         recentWorkspaces: recents,
         selectedFile: null,
+        selectedFileHasScripts: false,
         expandedDirs: new Set(),
       });
     } finally {
@@ -61,12 +64,23 @@ export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
       root: null,
       entries: [],
       selectedFile: null,
+      selectedFileHasScripts: false,
       expandedDirs: new Set(),
     });
   },
 
-  selectFile(path) {
-    set({ selectedFile: path });
+  async selectFile(path) {
+    set({ selectedFile: path, selectedFileHasScripts: false });
+    if (!path) return;
+    try {
+      const inspection = await api.inspectHtml(path);
+      // Only apply if this file is still the selection.
+      if (get().selectedFile === path) {
+        set({ selectedFileHasScripts: inspection.hasScripts });
+      }
+    } catch {
+      // Inspection failures are non-fatal.
+    }
   },
 
   toggleDirectory(path) {

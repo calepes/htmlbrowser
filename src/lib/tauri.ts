@@ -22,6 +22,15 @@ export function readWorkspaceFile(path: string): Promise<string> {
   return invoke("read_workspace_file", { path });
 }
 
+export interface HtmlInspection {
+  hasScripts: boolean;
+  hasExternalResources: boolean;
+}
+
+export function inspectHtml(path: string): Promise<HtmlInspection> {
+  return invoke("inspect_html", { path });
+}
+
 export function setTrustMode(workspace: string, mode: TrustMode): Promise<void> {
   return invoke("set_trust_mode", { workspace, mode });
 }

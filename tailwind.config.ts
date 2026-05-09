@@ -40,6 +40,9 @@ export default {
         accent: {
           DEFAULT: "rgb(var(--accent) / <alpha-value>)",
         },
+        warn: {
+          DEFAULT: "rgb(var(--warn) / <alpha-value>)",
+        },
       },
     },
   },

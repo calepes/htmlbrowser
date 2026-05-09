@@ -3,14 +3,15 @@
 @tailwind utilities;
 
 :root {
-  --bg: 18 18 20;
-  --bg-subtle: 24 24 27;
-  --bg-muted: 32 32 36;
-  --fg: 240 240 244;
-  --fg-muted: 168 168 176;
-  --fg-subtle: 110 110 118;
-  --border: 38 38 44;
-  --accent: 99 153 255;
+  --bg: 8 8 10;
+  --bg-subtle: 12 12 14;
+  --bg-muted: 28 28 32;
+  --fg: 245 245 247;
+  --fg-muted: 150 150 158;
+  --fg-subtle: 95 95 102;
+  --border: 24 24 27;
+  --accent: 34 197 94;
+  --warn: 245 158 11;
   color-scheme: dark;
 }
 
