@@ -21,7 +21,7 @@
         "minHeight": 480,
         "transparent": true,
         "titleBarStyle": "Overlay",
-        "trafficLightPosition": { "x": 16, "y": 16 },
+        "trafficLightPosition": { "x": 18, "y": 22 },
         "windowEffects": {
           "effects": ["hudWindow"],
           "state": "active"

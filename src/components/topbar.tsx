@@ -35,10 +35,10 @@ export function TopBar() {
   return (
     <div
       data-tauri-drag-region
-      className="relative flex h-11 shrink-0 items-center border-b border-border bg-bg pl-20 pr-3"
+      className="relative flex h-14 shrink-0 items-center border-b border-border bg-bg pl-24 pr-4"
     >
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-        <span className="font-mono text-[13px] tracking-tight text-fg">
+        <span className="font-mono text-[13px] tracking-tight text-fg-warm">
           {title}
         </span>
       </div>

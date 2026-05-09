@@ -5,11 +5,14 @@
 :root {
   --bg: 8 8 10;
   --bg-subtle: 12 12 14;
-  --bg-muted: 28 28 32;
+  --bg-muted: 26 26 30;
+  --bg-selected: 30 30 34;
   --fg: 245 245 247;
+  --fg-warm: 232 228 218;
   --fg-muted: 150 150 158;
   --fg-subtle: 95 95 102;
-  --border: 24 24 27;
+  --border: 28 28 32;
+  --border-strong: 44 44 50;
   --accent: 34 197 94;
   --warn: 245 158 11;
   color-scheme: dark;

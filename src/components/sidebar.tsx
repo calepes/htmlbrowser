@@ -14,11 +14,11 @@ export function Sidebar() {
 
   if (!root) {
     return (
-      <aside className="flex h-full w-64 shrink-0 flex-col border-r border-border bg-bg-subtle">
-        <div className="px-3 py-3 font-mono text-[11px] uppercase tracking-wider text-fg-subtle">
+      <aside className="flex h-full w-64 shrink-0 flex-col border-r border-border bg-bg">
+        <div className="px-4 py-3 font-mono text-[11px] uppercase tracking-wider text-fg-subtle">
           Workspace
         </div>
-        <div className="px-3 py-2 text-sm text-fg-muted">
+        <div className="px-4 py-2 font-mono text-[13px] text-fg-muted">
           No workspace open.
         </div>
       </aside>
@@ -26,13 +26,10 @@ export function Sidebar() {
   }
 
   return (
-    <aside className="flex h-full w-64 shrink-0 flex-col border-r border-border bg-bg-subtle">
-      <div className="px-3 pt-3 pb-2 font-mono text-[11px] uppercase tracking-wider text-fg-subtle">
-        {basename(root)}
-      </div>
-      <div className="flex-1 overflow-y-auto px-1.5 pb-2">
+    <aside className="flex h-full w-64 shrink-0 flex-col border-r border-border bg-bg">
+      <div className="flex-1 overflow-y-auto px-2 py-3">
         {sorted.length === 0 ? (
-          <div className="px-3 py-4 text-sm text-fg-muted">
+          <div className="px-3 py-4 font-mono text-[13px] text-fg-muted">
             No HTML files found.
           </div>
         ) : (
@@ -100,7 +97,7 @@ function TreeNode({
   const isDir = entry.kind === "directory";
   const isOpen = expanded.has(entry.path);
   const isSelected = !isDir && selected === entry.path;
-  const indent = { paddingLeft: 6 + depth * 14 };
+  const indent = { paddingLeft: 8 + depth * 16 };
 
   if (isDir) {
     const children = entry.children ? sortEntries(entry.children) : [];
@@ -109,7 +106,7 @@ function TreeNode({
         <button
           type="button"
           onClick={() => onToggle(entry.path)}
-          className="flex w-full items-center gap-1.5 rounded-md px-1.5 py-1 text-left text-fg-muted hover:bg-bg-muted/50 hover:text-fg"
+          className="flex w-full items-center gap-2 rounded-md py-1 pr-2 text-left text-fg-warm hover:bg-bg-muted/40"
           style={indent}
         >
           <ChevronIcon open={isOpen} />
@@ -136,15 +133,15 @@ function TreeNode({
         type="button"
         onClick={() => onSelect(entry.path)}
         className={
-          "flex w-full items-center gap-1.5 rounded-md px-1.5 py-1 text-left transition-colors " +
+          "flex w-full items-center gap-2 rounded-md py-1 pr-2 text-left transition-colors " +
           (isSelected
-            ? "bg-bg-muted text-fg"
-            : "text-fg-muted hover:bg-bg-muted/50 hover:text-fg")
+            ? "bg-bg-selected text-fg-warm ring-1 ring-inset ring-border-strong"
+            : "text-fg-warm hover:bg-bg-muted/40")
         }
         style={indent}
       >
         <span className="w-3" />
-        <FileIcon />
+        <CodeFileIcon />
         <span className="truncate">{entry.name}</span>
       </button>
     </li>
@@ -180,16 +177,16 @@ function FolderIcon() {
       fill="none"
     >
       <path
-        d="M2 4.5A1.5 1.5 0 0 1 3.5 3h2.879a1.5 1.5 0 0 1 1.06.44l.621.62a1.5 1.5 0 0 0 1.06.44H12.5A1.5 1.5 0 0 1 14 6v5.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 11.5v-7Z"
+        d="M2 4.75A1.75 1.75 0 0 1 3.75 3h2.69a1.75 1.75 0 0 1 1.237.513l.56.56A1.75 1.75 0 0 0 9.474 4.6H12.25A1.75 1.75 0 0 1 14 6.35v5.4A1.75 1.75 0 0 1 12.25 13.5h-8.5A1.75 1.75 0 0 1 2 11.75v-7Z"
         stroke="currentColor"
-        strokeWidth="1.25"
+        strokeWidth="1.2"
         strokeLinejoin="round"
       />
     </svg>
   );
 }
 
-function FileIcon() {
+function CodeFileIcon() {
   return (
     <svg
       className="h-3.5 w-3.5 shrink-0 text-fg-subtle"
@@ -197,15 +194,15 @@ function FileIcon() {
       fill="none"
     >
       <path
-        d="M4 2.5A1.5 1.5 0 0 1 5.5 1h4.379a1.5 1.5 0 0 1 1.06.44l2.121 2.12a1.5 1.5 0 0 1 .44 1.061V13.5a1.5 1.5 0 0 1-1.5 1.5h-7A1.5 1.5 0 0 1 4 13.5v-11Z"
+        d="M3.5 2.75A1.25 1.25 0 0 1 4.75 1.5h4.379a1.25 1.25 0 0 1 .884.366l2.121 2.121a1.25 1.25 0 0 1 .366.884V13.25A1.25 1.25 0 0 1 11.25 14.5h-6.5A1.25 1.25 0 0 1 3.5 13.25V2.75Z"
         stroke="currentColor"
-        strokeWidth="1.25"
+        strokeWidth="1.2"
         strokeLinejoin="round"
       />
       <path
-        d="m6.5 9 -1.25 1.25L6.5 11.5M9.5 9l1.25 1.25L9.5 11.5"
+        d="m6.6 8.5-1.1 1.25 1.1 1.25M9.4 8.5l1.1 1.25-1.1 1.25"
         stroke="currentColor"
-        strokeWidth="1.25"
+        strokeWidth="1.2"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
@@ -218,9 +215,4 @@ function sortEntries(entries: DirEntry[]): DirEntry[] {
     if (a.kind !== b.kind) return a.kind === "directory" ? -1 : 1;
     return a.name.localeCompare(b.name);
   });
-}
-
-function basename(p: string): string {
-  const parts = p.split("/").filter(Boolean);
-  return parts[parts.length - 1] ?? p;
 }
