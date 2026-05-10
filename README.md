@@ -29,9 +29,9 @@ It is **not** a browser replacement. It is a runtime for local artifacts.
 
 ## Demo
 
-<video src="https://github.com/maail/htmlbrowser.dev/raw/main/.github/assets/demo.mp4" controls poster=".github/assets/demo-poster.jpg" width="100%"></video>
+<a href="https://htmlbrowser.dev"><img src=".github/assets/demo-poster.jpg" alt="Watch the demo" width="100%" /></a>
 
-> Save a file in your editor → preview updates instantly. No build, no reload, no localhost.
+> Save a file in your editor → preview updates instantly. No build, no reload, no localhost. [Watch the live demo →](https://htmlbrowser.dev)
 
 <br />
 
