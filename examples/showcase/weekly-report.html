@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Weekly Report — Week 18</title>
+    <style>
+      :root {
+        --bg: #faf8f3;
+        --surface: #ffffff;
+        --border: #e8e4d9;
+        --ink: #1a1a1a;
+        --ink-muted: #6b6b6b;
+        --ink-subtle: #999999;
+        --accent: #ea580c;
+        --pos: #16a34a;
+        --neg: #dc2626;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0; background: var(--bg); color: var(--ink);
+        font-family: -apple-system, "Inter", ui-sans-serif, system-ui, sans-serif;
+        font-size: 15px; line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+      }
+      .wrap { max-width: 760px; margin: 0 auto; padding: 56px 48px 80px; }
+
+      .crumb {
+        font-family: ui-monospace, Menlo, monospace; font-size: 12px;
+        color: var(--ink-subtle); margin-bottom: 8px;
+      }
+      .meta-row { display: flex; gap: 14px; margin: 12px 0 32px; align-items: center; flex-wrap: wrap; }
+      .tag {
+        display: inline-block; padding: 3px 10px; background: white;
+        border: 1px solid var(--border); color: var(--ink-muted);
+        border-radius: 999px; font-size: 12px;
+      }
+      .tag.live { background: #dcfce7; color: #166534; border-color: #86efac; font-weight: 600; }
+      h1 { font-size: 36px; font-weight: 700; letter-spacing: -0.025em; margin: 0 0 6px; line-height: 1.1; }
+      .sub { color: var(--ink-muted); font-size: 16px; margin-bottom: 8px; }
+
+      h2 {
+        font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em;
+        font-weight: 600; color: var(--ink-subtle);
+        margin: 36px 0 14px; padding-bottom: 6px; border-bottom: 1px solid var(--border);
+      }
+      p { margin: 0 0 14px; }
+
+      .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 0 0 24px; }
+      .stat { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+      .stat .k { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-subtle); margin-bottom: 4px; font-weight: 600; }
+      .stat .v { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; font-variant-numeric: tabular-nums; }
+      .stat .d { font-size: 11px; margin-top: 4px; font-weight: 600; }
+      .stat .d.up { color: var(--pos); }
+      .stat .d.down { color: var(--neg); }
+
+      .chart {
+        background: var(--surface); border: 1px solid var(--border);
+        border-radius: 12px; padding: 18px 20px; margin: 0 0 28px;
+      }
+      .chart h3 { font-size: 14px; font-weight: 600; margin: 0 0 14px; display: flex; justify-content: space-between; }
+      .chart h3 .muted { color: var(--ink-subtle); font-weight: 400; font-size: 12px; }
+      .bars { display: flex; align-items: end; gap: 14px; height: 110px; padding: 0 10px; }
+      .bar-col { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; }
+      .bar-col .bar { width: 100%; background: var(--accent); border-radius: 4px 4px 0 0; min-height: 6px; }
+      .bar-col .lab { font-size: 10px; color: var(--ink-subtle); font-family: ui-monospace, Menlo, monospace; }
+
+      blockquote {
+        border-left: 3px solid var(--accent); margin: 16px 0;
+        padding: 6px 0 6px 16px; color: var(--ink-muted); font-style: italic;
+      }
+      ul { padding-left: 22px; }
+      li { margin: 6px 0; }
+      strong { color: var(--ink); font-weight: 600; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="crumb">reports / week-18-2026.html</div>
+      <h1>Engineering Weekly · Week 18</h1>
+      <div class="sub">Apr 27 – May 3, 2026</div>
+      <div class="meta-row">
+        <span class="tag">Eng</span>
+        <span class="tag">Q2</span>
+        <span class="tag live">Auto-generated</span>
+        <span style="color:var(--ink-subtle); font-size:13px; font-family: ui-monospace, Menlo, monospace;">Generated 2026-05-04 09:14</span>
+      </div>
+
+      <h2>The numbers</h2>
+      <div class="stats">
+        <div class="stat">
+          <div class="k">PRs merged</div>
+          <div class="v">42</div>
+          <div class="d up">▲ 12%</div>
+        </div>
+        <div class="stat">
+          <div class="k">Deploys</div>
+          <div class="v">28</div>
+          <div class="d up">▲ 4</div>
+        </div>
+        <div class="stat">
+          <div class="k">Incidents</div>
+          <div class="v">1</div>
+          <div class="d down">▼ −2</div>
+        </div>
+        <div class="stat">
+          <div class="k">Cycle time</div>
+          <div class="v">2.3d</div>
+          <div class="d up">▼ 0.4d</div>
+        </div>
+      </div>
+
+      <div class="chart">
+        <h3>PRs merged per day <span class="muted">last 7 days</span></h3>
+        <div class="bars">
+          <div class="bar-col"><div class="bar" style="height:62%"></div><span class="lab">Mon</span></div>
+          <div class="bar-col"><div class="bar" style="height:88%"></div><span class="lab">Tue</span></div>
+          <div class="bar-col"><div class="bar" style="height:74%"></div><span class="lab">Wed</span></div>
+          <div class="bar-col"><div class="bar" style="height:96%"></div><span class="lab">Thu</span></div>
+          <div class="bar-col"><div class="bar" style="height:80%"></div><span class="lab">Fri</span></div>
+          <div class="bar-col"><div class="bar" style="height:18%"></div><span class="lab">Sat</span></div>
+          <div class="bar-col"><div class="bar" style="height:24%"></div><span class="lab">Sun</span></div>
+        </div>
+      </div>
+
+      <h2>Highlights</h2>
+      <p>
+        The team shipped the <strong>auth-v2 magic link rollout</strong> to 5% of
+        traffic on Wednesday. Auth failure p50 stayed flat; p99 dropped from 240ms
+        to 180ms thanks to the cookie-based session swap. We'll widen to 25%
+        Monday if the dashboard stays green over the weekend.
+      </p>
+      <p>
+        Cycle time fell to 2.3 days, the lowest in three months. Two factors:
+        Ravi's PR template change forces small, focused diffs, and the new
+        preview-deploy bot saved ~40 manual handoffs across the week.
+      </p>
+
+      <blockquote>
+        "Reviewing a 200-line PR with one focused change is fundamentally
+        different from reviewing 1,200 lines spread across six concerns."
+        — Joel, in the post-mortem channel
+      </blockquote>
+
+      <h2>What we shipped</h2>
+      <ul>
+        <li><strong>Auth-v2 magic links</strong> — 5% canary live, full Loops integration, 30-day rolling sessions</li>
+        <li><strong>Preview-deploy bot</strong> — every PR now spins up a Vercel preview tagged with the branch</li>
+        <li><strong>Billing webhook retries</strong> — exponential backoff up to 24h for transient failures</li>
+        <li><strong>iOS app v2.4</strong> — App Store review approved Friday morning</li>
+      </ul>
+
+      <h2>Risks &amp; debts</h2>
+      <ul>
+        <li>WebAuthn step-up flow still pending — blocked on Sarah's compliance review</li>
+        <li>Database migration <code>0042_session_split</code> needs a maintenance window before traffic widens past 25%</li>
+        <li>Two new flaky tests in the iOS suite — <code>SignInWithApple</code> and <code>BiometricEnroll</code></li>
+      </ul>
+
+      <h2>Next week</h2>
+      <p>
+        Widen auth-v2 to 25% Monday, run the database migration during the
+        Tuesday 4am window, and start the WebAuthn flow as soon as legal signs
+        off. Joel is on call for the rollout.
+      </p>
+    </div>
+  </body>
+</html>
