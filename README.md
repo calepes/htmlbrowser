@@ -15,12 +15,6 @@ A local-first viewer for AI-generated HTML artifacts.
 
 </div>
 
-<br />
-
-![HTML Browser preview](.github/assets/demo-poster.jpg)
-
-<br />
-
 Claude Code, Cursor, OpenCode, and other AI workflows constantly generate HTML files — specs, dashboards, reports, prototypes, handoffs. Browsers aren't built for this. **HTML Browser** is.
 
 Open a folder. Get instant previews with live reload. No browser tabs. No localhost servers. No clutter. Built with Tauri v2, React, Zustand, and Rust. The app keeps everything on disk, watches for changes via `notify`, isolates each artifact in a dedicated child webview with a custom `htmlartifact://` URI scheme, and ships with a signed + notarized macOS release flow.
