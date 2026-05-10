@@ -7,6 +7,7 @@ import { useWorkspaceStore } from "@/store/workspace";
 import { useSettingsStore } from "@/store/settings";
 import { useFileWatcher } from "@/hooks/use-file-watcher";
 import { useUpdaterOnLaunch } from "@/hooks/use-updater";
+import { useMenuEvents } from "@/hooks/use-menu-events";
 
 export function App() {
   const root = useWorkspaceStore((s) => s.root);
@@ -23,6 +24,7 @@ export function App() {
 
   useFileWatcher();
   useUpdaterOnLaunch();
+  useMenuEvents();
 
   if (!root) {
     return (

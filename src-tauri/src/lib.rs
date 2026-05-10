@@ -1,11 +1,12 @@
 mod commands;
+mod menu;
 mod paths;
 mod protocol;
 mod state;
 mod storage;
 mod watcher;
 
-use tauri::Manager;
+use tauri::{Emitter, Manager};
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -35,11 +36,28 @@ pub fn run() {
         ])
         .setup(|app| {
             // Force the main window to show; on macOS the transparent +
-            // hudWindow effect can otherwise remain hidden until interaction.
+            // sidebar effect can otherwise remain hidden until interaction.
             if let Some(w) = app.get_webview_window("main") {
                 let _ = w.show();
             }
+
+            // Custom application menu with Check for Updates and Open Folder.
+            let menu = menu::build(app.handle())?;
+            app.set_menu(menu)?;
+
             Ok(())
+        })
+        .on_menu_event(|app, event| match event.id().as_ref() {
+            id if id == menu::ID_CHECK_UPDATES => {
+                let _ = app.emit("menu:check-updates", ());
+            }
+            id if id == menu::ID_OPEN_FOLDER => {
+                let _ = app.emit("menu:open-folder", ());
+            }
+            id if id == menu::ID_RELOAD_PREVIEW => {
+                let _ = app.emit("menu:reload-preview", ());
+            }
+            _ => {}
         })
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
