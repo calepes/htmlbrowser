@@ -84,3 +84,17 @@ jobs:
           args: --target universal-apple-darwin
           includeUpdaterJson: true
           updaterJsonPreferNsis: false
+
+      - name: Upload stable-named DMG for landing-page link
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Find the versioned DMG that tauri-action just built and uploaded.
+          DMG_PATH=$(ls src-tauri/target/universal-apple-darwin/release/bundle/dmg/*.dmg | head -1)
+          if [ -z "$DMG_PATH" ]; then
+            echo "No DMG found in bundle output"; exit 1
+          fi
+          # Copy to a stable, version-less name so the landing page can link to
+          # https://github.com/maail/htmlbrowser.dev/releases/latest/download/htmlbrowser.dev.dmg
+          cp "$DMG_PATH" "/tmp/htmlbrowser.dev.dmg"
+          gh release upload "${{ github.ref_name }}" "/tmp/htmlbrowser.dev.dmg" --clobber
