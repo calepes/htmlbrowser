@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Authentication Flow v2 — Spec</title>
+    <style>
+      :root {
+        --bg: #faf8f3;
+        --surface: #ffffff;
+        --border: #e8e4d9;
+        --ink: #1a1a1a;
+        --ink-muted: #6b6b6b;
+        --ink-subtle: #999999;
+        --accent: #16a34a;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0; background: var(--bg); color: var(--ink);
+        font-family: -apple-system, "Inter", ui-sans-serif, system-ui, sans-serif;
+        font-size: 15px; line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+      }
+      .wrap { max-width: 820px; margin: 0 auto; padding: 56px 48px 80px; }
+      .crumb {
+        font-family: ui-monospace, Menlo, monospace; font-size: 12px;
+        color: var(--ink-subtle); margin-bottom: 8px;
+      }
+      h1 {
+        font-size: 36px; font-weight: 700; letter-spacing: -0.025em;
+        margin: 0 0 12px; line-height: 1.1;
+      }
+      .lede { color: var(--ink-muted); font-size: 17px; margin-bottom: 8px; }
+      .meta-row { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; margin-bottom: 40px; padding: 12px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+      .meta { font-size: 13px; color: var(--ink-muted); }
+      .meta strong { color: var(--ink); font-weight: 500; }
+      .badge { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+      .badge.draft { background: #fef3c7; color: #92400e; }
+      .badge.shipped { background: #dcfce7; color: #166534; }
+
+      h2 { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-subtle); margin: 40px 0 12px; }
+      h3 { font-size: 17px; font-weight: 600; margin: 24px 0 8px; }
+      p { margin: 0 0 14px; }
+
+      /* Flow diagram */
+      .flow {
+        background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+        padding: 32px; margin: 24px 0;
+      }
+      .flow svg { display: block; max-width: 100%; height: auto; margin: 0 auto; }
+
+      ul { padding-left: 20px; margin: 0 0 14px; }
+      li { margin: 4px 0; }
+      code { background: #f0ede4; padding: 1px 6px; border-radius: 4px; font-size: 13px; font-family: ui-monospace, Menlo, monospace; }
+
+      table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+      th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); }
+      th { background: #f0ede4; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-muted); }
+      tr:last-child td { border-bottom: 0; }
+
+      .check { color: var(--accent); margin-right: 6px; }
+      .warn { color: #d97706; margin-right: 6px; }
+
+      .signoffs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 16px 0; }
+      .signoff { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+      .signoff .role { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-subtle); margin-bottom: 4px; }
+      .signoff .who { font-weight: 500; }
+      .signoff .status { font-size: 12px; color: var(--accent); margin-top: 4px; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="crumb">specs / auth-flow-v2.html</div>
+      <h1>Authentication Flow v2</h1>
+      <p class="lede">Magic-link login with optional WebAuthn step-up. Replaces the existing OAuth-only flow that legal flagged in Q2.</p>
+
+      <div class="meta-row">
+        <span class="meta"><strong>Owner</strong> · Maail Hasan</span>
+        <span class="meta"><strong>Reviewers</strong> · Eng, Security, Legal</span>
+        <span class="meta"><strong>Target</strong> · 2026-06-30</span>
+        <span class="badge draft">Draft</span>
+      </div>
+
+      <h2>Flow</h2>
+      <div class="flow">
+        <svg viewBox="0 0 720 220" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M0,0 L10,5 L0,10 z" fill="#1a1a1a" />
+            </marker>
+          </defs>
+          <!-- nodes -->
+          <g font-family="-apple-system, ui-sans-serif" font-size="13" font-weight="500">
+            <rect x="20"  y="80" width="100" height="48" rx="8" fill="white" stroke="#1a1a1a" stroke-width="1.5" />
+            <text x="70" y="108" text-anchor="middle">User</text>
+
+            <rect x="170" y="80" width="120" height="48" rx="8" fill="white" stroke="#1a1a1a" stroke-width="1.5" />
+            <text x="230" y="108" text-anchor="middle">Email magic link</text>
+
+            <rect x="340" y="80" width="100" height="48" rx="8" fill="white" stroke="#1a1a1a" stroke-width="1.5" />
+            <text x="390" y="108" text-anchor="middle">Verify token</text>
+
+            <polygon points="490,72 600,104 490,136 380,104" fill="#fef3c7" stroke="#d97706" stroke-width="1.5" transform="translate(70,0)" />
+            <text x="630" y="100" text-anchor="middle">Sensitive</text>
+            <text x="630" y="116" text-anchor="middle">action?</text>
+
+            <rect x="470" y="170" width="120" height="44" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5" />
+            <text x="530" y="197" text-anchor="middle">Allow</text>
+
+            <rect x="600" y="20" width="100" height="44" rx="8" fill="#fef3c7" stroke="#d97706" stroke-width="1.5" />
+            <text x="650" y="47" text-anchor="middle">WebAuthn</text>
+          </g>
+          <g stroke="#1a1a1a" stroke-width="1.5" fill="none" marker-end="url(#arrow)">
+            <line x1="120" y1="104" x2="170" y2="104" />
+            <line x1="290" y1="104" x2="340" y2="104" />
+            <line x1="440" y1="104" x2="490" y2="104" />
+            <path d="M 630 90 L 630 64" />
+            <path d="M 630 130 L 530 170" />
+            <path d="M 700 42 L 530 170" stroke-dasharray="4 4" />
+          </g>
+        </svg>
+      </div>
+
+      <h2>Why this changes</h2>
+      <p>The existing OAuth-only flow ties identity to a third-party IdP. Legal flagged token retention in Q2 — we cache provider tokens in a way that doesn't meet the new compliance requirements. The migration is compliance-driven, not tech-debt cleanup.</p>
+
+      <h2>Decisions</h2>
+      <ul>
+        <li><span class="check">✓</span> Email magic links via Loops, 15-minute TTL</li>
+        <li><span class="check">✓</span> WebAuthn (passkey) for step-up only — billing changes, team-admin actions, account deletion</li>
+        <li><span class="check">✓</span> Drop Google/GitHub OAuth — keep them as identity hints only</li>
+        <li><span class="warn">⚠</span> Session storage: server-side only, 30-day rolling, http-only cookies</li>
+      </ul>
+
+      <h2>Endpoints</h2>
+      <table>
+        <thead>
+          <tr><th>Method</th><th>Path</th><th>Purpose</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>POST</code></td><td><code>/auth/request</code></td><td>Send magic link to email</td></tr>
+          <tr><td><code>GET</code></td><td><code>/auth/verify?token=…</code></td><td>Exchange token for session</td></tr>
+          <tr><td><code>POST</code></td><td><code>/auth/webauthn/begin</code></td><td>Start passkey ceremony</td></tr>
+          <tr><td><code>POST</code></td><td><code>/auth/webauthn/finish</code></td><td>Verify and elevate session</td></tr>
+          <tr><td><code>POST</code></td><td><code>/auth/logout</code></td><td>Revoke active session</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Open questions</h2>
+      <ul>
+        <li>Do we honor Sign in with Apple's email-relay tokens for legacy users?</li>
+        <li>Is 15-minute TTL too aggressive for users on enterprise email security gateways?</li>
+        <li>Recovery flow when a user loses their device + their email — out of scope?</li>
+      </ul>
+
+      <h2>Sign-off</h2>
+      <div class="signoffs">
+        <div class="signoff">
+          <div class="role">Engineering</div>
+          <div class="who">Maail Hasan</div>
+          <div class="status">✓ Approved</div>
+        </div>
+        <div class="signoff">
+          <div class="role">Security</div>
+          <div class="who">Joel Quenneville</div>
+          <div class="status">✓ Approved</div>
+        </div>
+        <div class="signoff">
+          <div class="role">Legal</div>
+          <div class="who">Sarah Patel</div>
+          <div class="status" style="color:#d97706">◷ Pending</div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
