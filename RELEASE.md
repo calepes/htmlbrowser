@@ -63,13 +63,18 @@ In `Settings → Secrets and variables → Actions` on the repo, add:
 | --- | --- |
 | `APPLE_TEAM_ID` | 10-character team ID (top-right of developer.apple.com) |
 | `APPLE_SIGNING_IDENTITY` | Full identity string from `security find-identity`, e.g. `"Developer ID Application: Your Name (ABC1234DEF)"` |
-| `APPLE_CERTIFICATE` | `base64 -i your-cert.p12 \| pbcopy` and paste |
+| `APPLE_CERTIFICATE` | `base64 -i your-cert.p12 \| tr -d '\n' \| pbcopy` and paste |
 | `APPLE_CERTIFICATE_PASSWORD` | The password used when exporting the .p12 |
 | `APPLE_API_ISSUER` | Issuer ID UUID from App Store Connect |
 | `APPLE_API_KEY` | Key ID (10 characters, e.g. `XYZ1234567`) |
-| `APPLE_API_KEY_BASE64` | `base64 -i AuthKey_XXXXXXXXXX.p8 \| pbcopy` and paste |
-| `TAURI_SIGNING_PRIVATE_KEY` | `cat ~/.config/htmlbrowser-dev/updater.key \| base64 \| pbcopy` and paste |
+| `APPLE_API_KEY_BASE64` | `base64 -i AuthKey_XXXXXXXXXX.p8 \| tr -d '\n' \| pbcopy` and paste |
+| `TAURI_SIGNING_PRIVATE_KEY` | `base64 -i ~/.config/htmlbrowser-dev/updater.key \| tr -d '\n' \| pbcopy` and paste |
 | `TAURI_SIGNING_PRIVATE_KEY_PASSWORD` | The password for the updater key |
+
+> **Important:** macOS's `base64` command wraps output at 76 characters
+> by default, which embeds newlines that GitHub preserves verbatim in
+> secret values. Tauri's signer fails on those mid-stream newlines
+> (`Invalid symbol 10`). Always pipe through `tr -d '\n'` to strip them.
 
 The workflow decodes `APPLE_API_KEY_BASE64` back to a `.p8` file at runtime
 and points `APPLE_API_KEY_PATH` at it for `notarytool`.
