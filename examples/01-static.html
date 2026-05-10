@@ -39,20 +39,17 @@
   </head>
   <body>
     <div class="wrap">
-      <span class="badge" style="background:#2563eb">Live reload test</span>
-      <h1>If you can read this, live reload works ✅</h1>
-      <div class="meta">This file was just edited. The preview should have updated without you doing anything.</div>
+      <span class="badge">Static</span>
+      <h1>Pure Static HTML</h1>
+      <div class="meta">No JS. No external resources. Should render identically in Safe and Trusted.</div>
 
-      <p style="background:#fef3c7;color:#92400e;padding:12px 16px;border-radius:8px;border:1px solid #fbbf24">
-        <strong>Edited at:</strong> 2026-05-10 — if this banner is here, the file watcher caught the disk write and re-rendered the preview.
-      </p>
+      <p>This page tests the baseline: HTML + inline CSS, nothing else. If anything in the app shell prevents this from rendering correctly, that's a bug.</p>
 
       <h2>Checklist</h2>
       <ul>
         <li>Headings, paragraphs, lists render</li>
         <li>Inline <code>&lt;style&gt;</code> applies</li>
         <li>System font stack resolves</li>
-        <li><strong>Live reload triggers on file save</strong></li>
       </ul>
 
       <pre>console.log("This block is just text — no JS runs");</pre>
