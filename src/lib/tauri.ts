@@ -1,6 +1,7 @@
 import { invoke } from "@tauri-apps/api/core";
 import type {
   DirEntry,
+  SearchResults,
   StartupBundle,
   TrustMode,
   WorkspaceTree,
@@ -53,6 +54,14 @@ export function revealInFinder(path: string): Promise<void> {
 
 export function openExternalPath(path: string): Promise<void> {
   return invoke("open_external", { path });
+}
+
+export function searchWorkspace(
+  root: string,
+  query: string,
+  caseSensitive = false,
+): Promise<SearchResults> {
+  return invoke("search_workspace", { root, query, caseSensitive });
 }
 
 /** Build a `htmlartifact://` URL for a file in the active workspace. */

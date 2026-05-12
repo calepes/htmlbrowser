@@ -36,3 +36,17 @@ export interface DirectoryChangeEvent {
   workspace: string;
   path: string;
 }
+
+export interface SearchMatch {
+  path: string;
+  name: string;
+  lineNumber: number;
+  before: string;
+  hit: string;
+  after: string;
+}
+
+export interface SearchResults {
+  matches: SearchMatch[];
+  truncated: boolean;
+}

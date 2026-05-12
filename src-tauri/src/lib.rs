@@ -31,6 +31,7 @@ pub fn run() {
             commands::settings::set_trust_mode,
             commands::preview::show_preview,
             commands::preview::update_preview_bounds,
+            commands::search::search_workspace,
             commands::system::reveal_in_finder,
             commands::system::open_external,
         ])
