@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { DirEntry, SearchMatch, SearchResults } from "@/types";
 import { useWorkspaceStore } from "@/store/workspace";
+import { useSidebarStore } from "@/store/sidebar";
+import { usePreviewStore } from "@/store/preview";
 import { searchWorkspace } from "@/lib/tauri";
 
 export function Sidebar() {
@@ -10,19 +12,24 @@ export function Sidebar() {
   const expandedDirs = useWorkspaceStore((s) => s.expandedDirs);
   const selectFile = useWorkspaceStore((s) => s.selectFile);
   const toggleDirectory = useWorkspaceStore((s) => s.toggleDirectory);
+  const width = useSidebarStore((s) => s.width);
 
   const sorted = useMemo(() => sortEntries(entries), [entries]);
   const [query, setQuery] = useState("");
 
   if (!root) {
     return (
-      <aside className="flex h-full w-64 shrink-0 flex-col border-r border-border">
+      <aside
+        style={{ width }}
+        className="relative flex h-full shrink-0 flex-col border-r border-border"
+      >
         <div className="px-4 py-3 font-mono text-[11px] uppercase tracking-wider text-fg-subtle">
           Workspace
         </div>
         <div className="px-4 py-2 font-mono text-[13px] text-fg-muted">
           No workspace open.
         </div>
+        <ResizeHandle />
       </aside>
     );
   }
@@ -31,7 +38,10 @@ export function Sidebar() {
   const isSearching = trimmed.length > 0;
 
   return (
-    <aside className="flex h-full w-64 shrink-0 flex-col border-r border-border">
+    <aside
+      style={{ width }}
+      className="relative flex h-full shrink-0 flex-col border-r border-border"
+    >
       <div className="px-2 pt-2">
         <SearchInput value={query} onChange={setQuery} />
       </div>
@@ -58,7 +68,76 @@ export function Sidebar() {
           />
         )}
       </div>
+      <ResizeHandle />
     </aside>
+  );
+}
+
+function ResizeHandle() {
+  const width = useSidebarStore((s) => s.width);
+  const setWidth = useSidebarStore((s) => s.setWidth);
+  const resetWidth = useSidebarStore((s) => s.resetWidth);
+  const setOverlayHidden = usePreviewStore((s) => s.setOverlayHidden);
+
+  const startXRef = useRef(0);
+  const startWidthRef = useRef(width);
+  const [active, setActive] = useState(false);
+
+  useEffect(() => {
+    if (!active) return;
+    function onMove(e: MouseEvent) {
+      const delta = e.clientX - startXRef.current;
+      setWidth(startWidthRef.current + delta);
+    }
+    function onUp() {
+      setActive(false);
+    }
+    document.addEventListener("mousemove", onMove);
+    document.addEventListener("mouseup", onUp);
+    return () => {
+      document.removeEventListener("mousemove", onMove);
+      document.removeEventListener("mouseup", onUp);
+    };
+  }, [active, setWidth]);
+
+  useEffect(() => {
+    if (active) {
+      document.body.style.cursor = "col-resize";
+      document.body.style.userSelect = "none";
+      setOverlayHidden(true);
+    } else {
+      document.body.style.cursor = "";
+      document.body.style.userSelect = "";
+      setOverlayHidden(false);
+    }
+    return () => {
+      document.body.style.cursor = "";
+      document.body.style.userSelect = "";
+    };
+  }, [active, setOverlayHidden]);
+
+  return (
+    <div
+      role="separator"
+      aria-orientation="vertical"
+      aria-label="Resize sidebar"
+      onMouseDown={(e) => {
+        if (e.button !== 0) return;
+        startXRef.current = e.clientX;
+        startWidthRef.current = width;
+        setActive(true);
+        e.preventDefault();
+      }}
+      onDoubleClick={() => resetWidth()}
+      className="group absolute right-0 top-0 z-10 h-full w-1.5 -mr-[3px] cursor-col-resize"
+    >
+      <div
+        className={
+          "absolute right-[3px] top-0 h-full w-px transition-colors " +
+          (active ? "bg-accent/70" : "bg-transparent group-hover:bg-white/20")
+        }
+      />
+    </div>
   );
 }
 

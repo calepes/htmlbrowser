@@ -5,6 +5,7 @@ import { checkForUpdates } from "@/hooks/use-updater";
 import { useWorkspaceStore } from "@/store/workspace";
 import { useSettingsStore } from "@/store/settings";
 import { usePreviewStore } from "@/store/preview";
+import { useSidebarStore } from "@/store/sidebar";
 
 export function TopBar() {
   const root = useWorkspaceStore((s) => s.root);
@@ -16,6 +17,8 @@ export function TopBar() {
   const setTrustMode = useSettingsStore((s) => s.setTrustMode);
   const bumpReload = usePreviewStore((s) => s.bumpReload);
   const setOverlayHidden = usePreviewStore((s) => s.setOverlayHidden);
+  const sidebarCollapsed = useSidebarStore((s) => s.collapsed);
+  const toggleSidebar = useSidebarStore((s) => s.toggleCollapsed);
 
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -86,6 +89,26 @@ export function TopBar() {
       data-tauri-drag-region
       className="relative flex h-14 shrink-0 items-center border-b border-border pl-24 pr-4"
     >
+      {root && (
+        <button
+          type="button"
+          onClick={toggleSidebar}
+          title={
+            sidebarCollapsed
+              ? "Show sidebar (⌘B)"
+              : "Hide sidebar (⌘B)"
+          }
+          aria-label={sidebarCollapsed ? "Show sidebar" : "Hide sidebar"}
+          className={
+            "z-10 flex h-7 w-7 items-center justify-center rounded-md transition-colors " +
+            (sidebarCollapsed
+              ? "text-fg-muted hover:bg-white/5 hover:text-fg-warm"
+              : "text-fg-warm hover:bg-white/5")
+          }
+        >
+          <SidebarIcon collapsed={sidebarCollapsed} />
+        </button>
+      )}
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
         <div className="pointer-events-auto relative" ref={menuRef}>
           <button
@@ -340,6 +363,33 @@ function FolderIcon() {
         strokeWidth="1.3"
         strokeLinejoin="round"
       />
+    </svg>
+  );
+}
+
+function SidebarIcon({ collapsed }: { collapsed: boolean }) {
+  return (
+    <svg className="h-4 w-4" viewBox="0 0 16 16" fill="none">
+      <rect
+        x="2"
+        y="3"
+        width="12"
+        height="10"
+        rx="1.5"
+        stroke="currentColor"
+        strokeWidth="1.3"
+      />
+      <line
+        x1="6"
+        y1="3"
+        x2="6"
+        y2="13"
+        stroke="currentColor"
+        strokeWidth="1.3"
+      />
+      {!collapsed && (
+        <rect x="2.6" y="3.6" width="3" height="8.8" fill="currentColor" opacity="0.18" />
+      )}
     </svg>
   );
 }
