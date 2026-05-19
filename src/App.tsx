@@ -50,10 +50,10 @@ export function App() {
   }
 
   return (
-    <div className="flex h-full w-full flex-col">
-      <TopBar />
-      <div className="flex flex-1 overflow-hidden">
-        {!sidebarCollapsed && <Sidebar />}
+    <div className="flex h-full w-full">
+      {!sidebarCollapsed && <Sidebar />}
+      <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
+        <TopBar />
         <main className="flex-1 overflow-hidden">
           <Preview />
         </main>

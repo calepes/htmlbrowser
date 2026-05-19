@@ -17,7 +17,6 @@ export function Preview() {
   const setTrustMode = useSettingsStore((s) => s.setTrustMode);
   const reloadToken = usePreviewStore((s) => s.reloadToken);
   const bumpReload = usePreviewStore((s) => s.bumpReload);
-  const overlayHidden = usePreviewStore((s) => s.overlayHidden);
 
   const showJsBlockedBanner =
     !!selectedFile && trustMode === "safe" && selectedFileHasScripts;
@@ -27,7 +26,7 @@ export function Preview() {
     if (!el) return;
     let raf = 0;
     const update = () => {
-      if (overlayHidden || !selectedFile) {
+      if (!selectedFile) {
         void invoke("update_preview_bounds", {
           label: PREVIEW_LABEL,
           x: 0,
@@ -38,6 +37,9 @@ export function Preview() {
         return;
       }
       const rect = el.getBoundingClientRect();
+      // Skip transient zero-size measurements (mid-layout, hidden parents)
+      // so unrelated re-renders can't accidentally blank the preview.
+      if (rect.width <= 0 || rect.height <= 0) return;
       void invoke("update_preview_bounds", {
         label: PREVIEW_LABEL,
         x: Math.round(rect.left),
@@ -59,7 +61,7 @@ export function Preview() {
       ro.disconnect();
       window.removeEventListener("resize", schedule);
     };
-  }, [showJsBlockedBanner, overlayHidden, selectedFile]);
+  }, [showJsBlockedBanner, selectedFile]);
 
   useEffect(() => {
     if (!selectedFile) return;

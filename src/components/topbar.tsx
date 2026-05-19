@@ -1,7 +1,5 @@
-import { useEffect, useRef, useState } from "react";
 import { open as openDialog } from "@tauri-apps/plugin-dialog";
 import { openExternalPath } from "@/lib/tauri";
-import { checkForUpdates } from "@/hooks/use-updater";
 import { useWorkspaceStore } from "@/store/workspace";
 import { useSettingsStore } from "@/store/settings";
 import { usePreviewStore } from "@/store/preview";
@@ -11,59 +9,17 @@ export function TopBar() {
   const root = useWorkspaceStore((s) => s.root);
   const selectedFile = useWorkspaceStore((s) => s.selectedFile);
   const openWorkspace = useWorkspaceStore((s) => s.openWorkspace);
-  const recentWorkspaces = useWorkspaceStore((s) => s.recentWorkspaces);
-  const removeRecent = useWorkspaceStore((s) => s.removeRecent);
   const trustMode = useSettingsStore((s) => s.trustMode);
   const setTrustMode = useSettingsStore((s) => s.setTrustMode);
   const bumpReload = usePreviewStore((s) => s.bumpReload);
-  const setOverlayHidden = usePreviewStore((s) => s.setOverlayHidden);
   const sidebarCollapsed = useSidebarStore((s) => s.collapsed);
   const toggleSidebar = useSidebarStore((s) => s.toggleCollapsed);
 
-  const [menuOpen, setMenuOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
-
-  // Collapse the native preview webview while the dropdown is showing so it
-  // doesn't paint over the menu (native views always sit above HTML).
-  useEffect(() => {
-    setOverlayHidden(menuOpen);
-    return () => setOverlayHidden(false);
-  }, [menuOpen, setOverlayHidden]);
-
-  useEffect(() => {
-    if (!menuOpen) return;
-    function handleDown(e: MouseEvent) {
-      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-        setMenuOpen(false);
-      }
-    }
-    function handleKey(e: KeyboardEvent) {
-      if (e.key === "Escape") setMenuOpen(false);
-    }
-    document.addEventListener("mousedown", handleDown);
-    document.addEventListener("keydown", handleKey);
-    return () => {
-      document.removeEventListener("mousedown", handleDown);
-      document.removeEventListener("keydown", handleKey);
-    };
-  }, [menuOpen]);
-
   async function pickFolder() {
-    setMenuOpen(false);
     const picked = await openDialog({ directory: true, multiple: false });
     if (typeof picked === "string") {
       await openWorkspace(picked);
     }
-  }
-
-  async function checkUpdates() {
-    setMenuOpen(false);
-    await checkForUpdates({ notifyWhenUpToDate: true });
-  }
-
-  async function chooseRecent(path: string) {
-    setMenuOpen(false);
-    await openWorkspace(path);
   }
 
   async function toggleTrust() {
@@ -81,61 +37,35 @@ export function TopBar() {
     }
   }
 
-  const title = root ? basename(root) : "htmlbrowser.dev";
-  const otherRecents = recentWorkspaces.filter((p) => p !== root);
+  // Traffic lights live over this bar when no sidebar is shown.
+  const sidebarVisible = !!root && !sidebarCollapsed;
+  const leftPadClass = sidebarVisible ? "pl-4" : "pl-24";
+  // When the sidebar is visible the topbar lives only over the preview
+  // column; a horizontal divider here would clash with the sidebar's
+  // seamless top, so drop it in that case.
+  const borderClass = sidebarVisible ? "" : "border-b border-border";
 
   return (
     <div
       data-tauri-drag-region
-      className="relative flex h-14 shrink-0 items-center border-b border-border pl-24 pr-4"
+      className={
+        "relative flex h-14 shrink-0 items-center pr-4 " +
+        leftPadClass +
+        " " +
+        borderClass
+      }
     >
-      {root && (
+      {root && sidebarCollapsed && (
         <button
           type="button"
           onClick={toggleSidebar}
-          title={
-            sidebarCollapsed
-              ? "Show sidebar (⌘B)"
-              : "Hide sidebar (⌘B)"
-          }
-          aria-label={sidebarCollapsed ? "Show sidebar" : "Hide sidebar"}
-          className={
-            "z-10 flex h-7 w-7 items-center justify-center rounded-md transition-colors " +
-            (sidebarCollapsed
-              ? "text-fg-muted hover:bg-white/5 hover:text-fg-warm"
-              : "text-fg-warm hover:bg-white/5")
-          }
+          title="Show sidebar (⌘B)"
+          aria-label="Show sidebar"
+          className="z-10 ml-2 flex h-8 w-8 items-center justify-center rounded-md text-fg-muted transition-colors hover:bg-white/5 hover:text-fg-warm"
         >
-          <SidebarIcon collapsed={sidebarCollapsed} />
+          <SidebarIcon collapsed={true} />
         </button>
       )}
-      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-        <div className="pointer-events-auto relative" ref={menuRef}>
-          <button
-            type="button"
-            onClick={() => setMenuOpen((o) => !o)}
-            className="flex items-center gap-1.5 rounded-md px-2 py-1 font-mono text-[13px] tracking-tight text-fg-warm transition-colors hover:bg-white/5"
-          >
-            <span className="truncate max-w-[260px]">{title}</span>
-            <ChevronDownIcon
-              className={
-                "h-3 w-3 text-fg-subtle transition-transform " +
-                (menuOpen ? "rotate-180" : "")
-              }
-            />
-          </button>
-          {menuOpen && (
-            <WorkspaceMenu
-              currentRoot={root}
-              recents={otherRecents}
-              onChoose={chooseRecent}
-              onPick={pickFolder}
-              onRemove={(p) => removeRecent(p)}
-              onCheckUpdates={checkUpdates}
-            />
-          )}
-        </div>
-      </div>
 
       <div className="flex-1" />
 
@@ -195,93 +125,6 @@ export function TopBar() {
   );
 }
 
-function WorkspaceMenu({
-  currentRoot,
-  recents,
-  onChoose,
-  onPick,
-  onRemove,
-  onCheckUpdates,
-}: {
-  currentRoot: string | null;
-  recents: string[];
-  onChoose: (path: string) => void;
-  onPick: () => void;
-  onRemove: (path: string) => void;
-  onCheckUpdates: () => void;
-}) {
-  return (
-    <div className="absolute left-1/2 top-full z-50 mt-2 w-80 -translate-x-1/2 rounded-lg border border-white/10 bg-bg-subtle/95 p-1 shadow-2xl backdrop-blur-md">
-      {currentRoot && (
-        <>
-          <div className="px-3 py-2">
-            <div className="font-mono text-[10px] uppercase tracking-wider text-fg-subtle">
-              Current
-            </div>
-            <div className="mt-1 truncate text-[12px] text-fg-warm">
-              {currentRoot}
-            </div>
-          </div>
-          <div className="my-1 h-px bg-white/5" />
-        </>
-      )}
-      {recents.length > 0 && (
-        <>
-          <div className="px-3 pt-1 pb-1.5 font-mono text-[10px] uppercase tracking-wider text-fg-subtle">
-            Recent
-          </div>
-          <ul>
-            {recents.map((p) => (
-              <li key={p} className="group flex items-center">
-                <button
-                  type="button"
-                  onClick={() => onChoose(p)}
-                  className="flex flex-1 items-center gap-2 rounded-md px-3 py-1.5 text-left text-[13px] text-fg-warm hover:bg-white/5"
-                  title={p}
-                >
-                  <FolderIcon />
-                  <span className="flex-1 truncate">{basename(p)}</span>
-                  <span className="truncate text-[11px] text-fg-subtle max-w-[120px]">
-                    {dirname(p)}
-                  </span>
-                </button>
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onRemove(p);
-                  }}
-                  aria-label="Remove from recents"
-                  className="mr-1 hidden h-6 w-6 items-center justify-center rounded-md text-fg-subtle hover:bg-white/10 hover:text-fg-warm group-hover:flex"
-                >
-                  ×
-                </button>
-              </li>
-            ))}
-          </ul>
-          <div className="my-1 h-px bg-white/5" />
-        </>
-      )}
-      <button
-        type="button"
-        onClick={onPick}
-        className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-[13px] text-fg-warm hover:bg-white/5"
-      >
-        <PlusIcon />
-        Open folder…
-      </button>
-      <div className="my-1 h-px bg-white/5" />
-      <button
-        type="button"
-        onClick={onCheckUpdates}
-        className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-[13px] text-fg-muted hover:bg-white/5 hover:text-fg-warm"
-      >
-        Check for updates…
-      </button>
-    </div>
-  );
-}
-
 function IconButton({
   children,
   onClick,
@@ -303,20 +146,6 @@ function IconButton({
     >
       {children}
     </button>
-  );
-}
-
-function ChevronDownIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 12 12" fill="none">
-      <path
-        d="m3 4.5 3 3 3-3"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
   );
 }
 
@@ -369,7 +198,7 @@ function FolderIcon() {
 
 function SidebarIcon({ collapsed }: { collapsed: boolean }) {
   return (
-    <svg className="h-4 w-4" viewBox="0 0 16 16" fill="none">
+    <svg className="h-[18px] w-[18px]" viewBox="0 0 16 16" fill="none">
       <rect
         x="2"
         y="3"
@@ -392,27 +221,4 @@ function SidebarIcon({ collapsed }: { collapsed: boolean }) {
       )}
     </svg>
   );
-}
-
-function PlusIcon() {
-  return (
-    <svg className="h-3.5 w-3.5 shrink-0 text-fg-subtle" viewBox="0 0 14 14" fill="none">
-      <path
-        d="M7 2.5v9M2.5 7h9"
-        stroke="currentColor"
-        strokeWidth="1.4"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
-function basename(p: string): string {
-  const parts = p.split("/").filter(Boolean);
-  return parts[parts.length - 1] ?? p;
-}
-
-function dirname(p: string): string {
-  const parts = p.split("/").filter(Boolean);
-  return "/" + parts.slice(0, -1).join("/");
 }
