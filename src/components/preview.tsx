@@ -4,6 +4,10 @@ import { useWorkspaceStore } from "@/store/workspace";
 import { useSettingsStore } from "@/store/settings";
 import { usePreviewStore } from "@/store/preview";
 
+function applyColorScheme(label: string, scheme: string) {
+  void invoke("set_preview_color_scheme", { label, scheme });
+}
+
 const PREVIEW_LABEL = "preview";
 
 export function Preview() {
@@ -15,8 +19,10 @@ export function Preview() {
   );
   const trustMode = useSettingsStore((s) => s.trustMode);
   const setTrustMode = useSettingsStore((s) => s.setTrustMode);
+  const theme = useSettingsStore((s) => s.theme);
   const reloadToken = usePreviewStore((s) => s.reloadToken);
   const bumpReload = usePreviewStore((s) => s.bumpReload);
+  const viewMode = usePreviewStore((s) => s.viewMode);
 
   const showJsBlockedBanner =
     !!selectedFile && trustMode === "safe" && selectedFileHasScripts;
@@ -61,22 +67,68 @@ export function Preview() {
       ro.disconnect();
       window.removeEventListener("resize", schedule);
     };
-  }, [showJsBlockedBanner, selectedFile]);
+  }, [showJsBlockedBanner, selectedFile, viewMode]);
 
   useEffect(() => {
     if (!selectedFile) return;
-    void invoke("show_preview", {
+    invoke("show_preview", {
       label: PREVIEW_LABEL,
       file: selectedFile,
       trust: trustMode,
       token: reloadToken,
-    });
+    }).then(() => applyColorScheme(PREVIEW_LABEL, theme));
   }, [selectedFile, trustMode, reloadToken]);
+
+  // Sync preview color scheme when app theme changes.
+  useEffect(() => {
+    applyColorScheme(PREVIEW_LABEL, theme);
+  }, [theme]);
 
   async function enableTrusted() {
     if (!root) return;
     await setTrustMode(root, "trusted");
     bumpReload();
+  }
+
+  if (viewMode === "mobile") {
+    return (
+      <div className="flex h-full w-full flex-col bg-bg-subtle">
+        {showJsBlockedBanner && (
+          <div className="flex shrink-0 items-center gap-3 border-b border-warn/30 bg-warn/10 px-4 py-2 text-[12px] text-warn">
+            <span className="text-base leading-none">⚡</span>
+            <span className="flex-1 text-fg">
+              This file uses JavaScript. Switch to{" "}
+              <span className="font-medium text-warn">Trusted</span> to render it
+              fully.
+            </span>
+            <button
+              type="button"
+              onClick={enableTrusted}
+              className="rounded-md border border-warn/40 bg-warn/20 px-2.5 py-1 text-[11px] font-mono uppercase tracking-wider text-warn hover:bg-warn/30"
+            >
+              Switch to Trusted
+            </button>
+          </div>
+        )}
+        <div className="flex flex-1 items-center justify-center overflow-hidden py-6">
+          <div
+            ref={containerRef}
+            className="relative w-[393px] self-stretch rounded-xl bg-bg shadow-2xl ring-1 ring-border-strong"
+          >
+            {!selectedFile && (
+              <div className="flex h-full w-full items-center justify-center text-fg-subtle">
+                <div className="text-center">
+                  <div className="font-mono text-sm">Select a file to preview</div>
+                  <div className="mt-1 font-mono text-xs text-fg-subtle/80">
+                    Sidebar shows .html and .htm files in your workspace
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (

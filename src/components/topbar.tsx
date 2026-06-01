@@ -11,7 +11,11 @@ export function TopBar() {
   const openWorkspace = useWorkspaceStore((s) => s.openWorkspace);
   const trustMode = useSettingsStore((s) => s.trustMode);
   const setTrustMode = useSettingsStore((s) => s.setTrustMode);
+  const theme = useSettingsStore((s) => s.theme);
+  const setTheme = useSettingsStore((s) => s.setTheme);
   const bumpReload = usePreviewStore((s) => s.bumpReload);
+  const viewMode = usePreviewStore((s) => s.viewMode);
+  const setViewMode = usePreviewStore((s) => s.setViewMode);
   const sidebarCollapsed = useSidebarStore((s) => s.collapsed);
   const toggleSidebar = useSidebarStore((s) => s.toggleCollapsed);
 
@@ -35,6 +39,14 @@ export function TopBar() {
     } catch (err) {
       console.error("openExternal failed:", err);
     }
+  }
+
+  function toggleTheme() {
+    setTheme(theme === "dark" ? "light" : "dark");
+  }
+
+  function toggleViewMode() {
+    setViewMode(viewMode === "web" ? "mobile" : "web");
   }
 
   // Traffic lights live over this bar when no sidebar is shown.
@@ -61,7 +73,7 @@ export function TopBar() {
           onClick={toggleSidebar}
           title="Show sidebar (⌘B)"
           aria-label="Show sidebar"
-          className="z-10 ml-2 flex h-8 w-8 items-center justify-center rounded-md text-fg-muted transition-colors hover:bg-white/5 hover:text-fg-warm"
+          className="z-10 ml-2 flex h-8 w-8 items-center justify-center rounded-md text-fg-muted transition-colors hover:bg-bg-subtle hover:text-fg-warm"
         >
           <SidebarIcon collapsed={true} />
         </button>
@@ -84,7 +96,7 @@ export function TopBar() {
               "rounded-md border px-2.5 py-1 font-mono text-[11px] uppercase tracking-wider transition-colors " +
               (trustMode === "trusted"
                 ? "border-warn/40 bg-warn/15 text-warn hover:bg-warn/25"
-                : "border-white/10 bg-white/5 text-fg-muted hover:bg-white/10 hover:text-fg-warm")
+                : "border-border bg-bg-subtle text-fg-muted hover:bg-bg-muted hover:text-fg-warm")
             }
             title={
               trustMode === "trusted"
@@ -94,6 +106,16 @@ export function TopBar() {
           >
             {trustMode === "trusted" ? "Trusted" : "Safe"}
           </button>
+        )}
+        {root && (
+          <IconButton
+            onClick={toggleViewMode}
+            title={viewMode === "web" ? "Switch to mobile view" : "Switch to web view"}
+            label="Toggle view mode"
+            active={viewMode === "mobile"}
+          >
+            {viewMode === "web" ? <PhoneIcon /> : <DesktopIcon />}
+          </IconButton>
         )}
         {selectedFile && (
           <>
@@ -114,6 +136,13 @@ export function TopBar() {
           </>
         )}
         <IconButton
+          onClick={toggleTheme}
+          title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+          label="Toggle theme"
+        >
+          {theme === "dark" ? <SunIcon /> : <MoonIcon />}
+        </IconButton>
+        <IconButton
           onClick={pickFolder}
           title="Open folder"
           label="Open folder"
@@ -130,11 +159,13 @@ function IconButton({
   onClick,
   title,
   label,
+  active,
 }: {
   children: React.ReactNode;
   onClick: () => void;
   title: string;
   label: string;
+  active?: boolean;
 }) {
   return (
     <button
@@ -142,7 +173,12 @@ function IconButton({
       onClick={onClick}
       title={title}
       aria-label={label}
-      className="flex h-7 w-7 items-center justify-center rounded-md border border-white/10 bg-white/5 text-fg-muted transition-colors hover:bg-white/10 hover:text-fg-warm"
+      className={
+        "flex h-7 w-7 items-center justify-center rounded-md border transition-colors " +
+        (active
+          ? "border-accent/40 bg-accent/10 text-accent hover:bg-accent/20"
+          : "border-border bg-bg-subtle text-fg-muted hover:bg-bg-muted hover:text-fg-warm")
+      }
     >
       {children}
     </button>
@@ -219,6 +255,56 @@ function SidebarIcon({ collapsed }: { collapsed: boolean }) {
       {!collapsed && (
         <rect x="2.6" y="3.6" width="3" height="8.8" fill="currentColor" opacity="0.18" />
       )}
+    </svg>
+  );
+}
+
+function SunIcon() {
+  return (
+    <svg className="h-3.5 w-3.5" viewBox="0 0 14 14" fill="none">
+      <circle cx="7" cy="7" r="2.2" stroke="currentColor" strokeWidth="1.3" />
+      <path
+        d="M7 1.5V3M7 11v1.5M1.5 7H3M11 7h1.5M3.4 3.4l1.1 1.1M9.5 9.5l1.1 1.1M3.4 10.6l1.1-1.1M9.5 4.5l1.1-1.1"
+        stroke="currentColor"
+        strokeWidth="1.3"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function MoonIcon() {
+  return (
+    <svg className="h-3.5 w-3.5" viewBox="0 0 14 14" fill="none">
+      <path
+        d="M11.5 9A5 5 0 0 1 5 2.5a5 5 0 1 0 6.5 6.5Z"
+        stroke="currentColor"
+        strokeWidth="1.3"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function PhoneIcon() {
+  return (
+    <svg className="h-3.5 w-3.5" viewBox="0 0 14 14" fill="none">
+      <rect x="3.5" y="1.5" width="7" height="11" rx="1.5" stroke="currentColor" strokeWidth="1.3" />
+      <circle cx="7" cy="10.5" r="0.7" fill="currentColor" />
+    </svg>
+  );
+}
+
+function DesktopIcon() {
+  return (
+    <svg className="h-3.5 w-3.5" viewBox="0 0 14 14" fill="none">
+      <rect x="1.5" y="2.5" width="11" height="7.5" rx="1" stroke="currentColor" strokeWidth="1.3" />
+      <path
+        d="M4.5 12h5M7 10v2"
+        stroke="currentColor"
+        strokeWidth="1.3"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }

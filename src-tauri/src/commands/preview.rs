@@ -80,6 +80,53 @@ pub async fn update_preview_bounds(
     Ok(())
 }
 
+#[tauri::command]
+pub async fn set_preview_color_scheme(
+    app: AppHandle,
+    label: String,
+    scheme: String,
+) -> Result<(), String> {
+    let Some(view) = app.get_webview(&label) else {
+        return Ok(());
+    };
+
+    #[cfg(target_os = "macos")]
+    {
+        let is_dark = scheme == "dark";
+        view.with_webview(move |wv| {
+            use objc2::runtime::AnyObject;
+            use objc2::msg_send;
+
+            unsafe {
+                let ns_string_cls = objc2::runtime::AnyClass::get(
+                    std::ffi::CStr::from_bytes_with_nul_unchecked(b"NSString\0"),
+                )
+                .unwrap();
+                let ns_appearance_cls = objc2::runtime::AnyClass::get(
+                    std::ffi::CStr::from_bytes_with_nul_unchecked(b"NSAppearance\0"),
+                )
+                .unwrap();
+
+                let name_ptr: *const i8 = if is_dark {
+                    b"NSAppearanceNameDarkAqua\0".as_ptr().cast()
+                } else {
+                    b"NSAppearanceNameAqua\0".as_ptr().cast()
+                };
+
+                let ns_name: *mut AnyObject =
+                    msg_send![ns_string_cls, stringWithUTF8String: name_ptr];
+                let appearance: *mut AnyObject =
+                    msg_send![ns_appearance_cls, appearanceNamed: ns_name];
+                let webview = &*(wv.inner() as *const AnyObject);
+                let _: () = msg_send![webview, setAppearance: appearance];
+            }
+        })
+        .map_err(|e| e.to_string())?;
+    }
+
+    Ok(())
+}
+
 fn current_workspace(app: &AppHandle) -> Option<PathBuf> {
     let state = app.state::<AppState>().inner().clone();
     let s = state.lock();

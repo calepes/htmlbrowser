@@ -36,7 +36,7 @@ export function Sidebar() {
     return (
       <aside
         style={{ width }}
-        className="relative flex h-full shrink-0 flex-col border-r border-border"
+        className="relative flex h-full shrink-0 flex-col border-r border-border bg-bg-subtle"
       >
         <SidebarHeader />
         <div className="px-4 py-2 text-[13px] text-fg-muted">
@@ -53,7 +53,7 @@ export function Sidebar() {
   return (
     <aside
       style={{ width }}
-      className="relative flex h-full shrink-0 flex-col border-r border-border"
+      className="relative flex h-full shrink-0 flex-col border-r border-border bg-bg-subtle"
     >
       <SidebarHeader />
       <div className="px-3 pb-2">
@@ -104,7 +104,7 @@ function SidebarHeader() {
         onClick={toggleSidebar}
         title="Hide sidebar (⌘B)"
         aria-label="Hide sidebar"
-        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-fg-warm transition-colors hover:bg-white/5"
+        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-fg-warm transition-colors hover:bg-bg-subtle"
       >
         <SidebarIcon collapsed={false} />
       </button>
@@ -162,12 +162,12 @@ function WorkspaceFooter({ root }: { root: string | null }) {
   const label = root ? basename(root) : "No workspace";
 
   return (
-    <div className="relative shrink-0 border-t border-white/5 px-2 pt-1.5 pb-3">
+    <div className="relative shrink-0 border-t border-border px-2 pt-1.5 pb-3">
       <button
         ref={triggerRef}
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="flex w-full min-w-0 items-center gap-2 rounded-md px-2 py-1.5 text-left text-[13px] text-fg-warm transition-colors hover:bg-white/5"
+        className="flex w-full min-w-0 items-center gap-2 rounded-md px-2 py-1.5 text-left text-[13px] text-fg-warm transition-colors hover:bg-bg-subtle"
       >
         <SmallFolderIcon />
         <span className="min-w-0 flex-1 truncate" title={root ?? undefined}>
@@ -183,7 +183,7 @@ function WorkspaceFooter({ root }: { root: string | null }) {
       {open && (
         <div
           ref={popupRef}
-          className="absolute bottom-full left-2 right-2 z-50 mb-1 rounded-lg border border-white/10 bg-bg-subtle/95 p-1 shadow-2xl backdrop-blur-md"
+          className="absolute bottom-full left-2 right-2 z-50 mb-1 rounded-lg border border-border bg-bg-subtle/95 p-1 shadow-2xl backdrop-blur-md"
         >
           {root && (
             <>
@@ -198,7 +198,7 @@ function WorkspaceFooter({ root }: { root: string | null }) {
                   {root}
                 </div>
               </div>
-              <div className="my-1 h-px bg-white/5" />
+              <div className="my-1 h-px bg-border" />
             </>
           )}
           {otherRecents.length > 0 && (
@@ -212,7 +212,7 @@ function WorkspaceFooter({ root }: { root: string | null }) {
                     <button
                       type="button"
                       onClick={() => chooseRecent(p)}
-                      className="flex min-w-0 flex-1 items-center gap-2 rounded-md px-3 py-1.5 text-left text-[13px] text-fg-warm hover:bg-white/5"
+                      className="flex min-w-0 flex-1 items-center gap-2 rounded-md px-3 py-1.5 text-left text-[13px] text-fg-warm hover:bg-bg-muted"
                       title={p}
                     >
                       <SmallFolderIcon />
@@ -227,29 +227,29 @@ function WorkspaceFooter({ root }: { root: string | null }) {
                         removeRecent(p);
                       }}
                       aria-label="Remove from recents"
-                      className="mr-1 hidden h-6 w-6 items-center justify-center rounded-md text-fg-subtle hover:bg-white/10 hover:text-fg-warm group-hover:flex"
+                      className="mr-1 hidden h-6 w-6 items-center justify-center rounded-md text-fg-subtle hover:bg-bg-muted hover:text-fg-warm group-hover:flex"
                     >
                       ×
                     </button>
                   </li>
                 ))}
               </ul>
-              <div className="my-1 h-px bg-white/5" />
+              <div className="my-1 h-px bg-border" />
             </>
           )}
           <button
             type="button"
             onClick={pickFolder}
-            className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-[13px] text-fg-warm hover:bg-white/5"
+            className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-[13px] text-fg-warm hover:bg-bg-muted"
           >
             <PlusIcon />
             Open folder…
           </button>
-          <div className="my-1 h-px bg-white/5" />
+          <div className="my-1 h-px bg-border" />
           <button
             type="button"
             onClick={onCheckUpdates}
-            className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-[13px] text-fg-muted hover:bg-white/5 hover:text-fg-warm"
+            className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-[13px] text-fg-muted hover:bg-bg-muted hover:text-fg-warm"
           >
             Check for updates…
           </button>
@@ -334,19 +334,19 @@ function SearchInput({
         spellCheck={false}
         autoCorrect="off"
         autoCapitalize="off"
-        className="h-8 w-full rounded-lg border border-white/5 bg-white/[0.04] pl-8 pr-12 text-[13px] text-fg-warm placeholder:text-fg-subtle focus:border-white/15 focus:bg-white/[0.07] focus:outline-none"
+        className="h-8 w-full rounded-lg border border-border bg-bg-subtle pl-8 pr-12 text-[13px] text-fg-warm placeholder:text-fg-subtle focus:border-border-strong focus:bg-bg-muted focus:outline-none"
       />
       {hasValue ? (
         <button
           type="button"
           onClick={() => onChange("")}
           aria-label="Clear search"
-          className="absolute right-1.5 top-1/2 flex h-5 w-5 -translate-y-1/2 items-center justify-center rounded text-fg-subtle hover:bg-white/10 hover:text-fg-warm"
+          className="absolute right-1.5 top-1/2 flex h-5 w-5 -translate-y-1/2 items-center justify-center rounded text-fg-subtle hover:bg-bg-muted hover:text-fg-warm"
         >
           ×
         </button>
       ) : (
-        <kbd className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 rounded border border-white/5 bg-white/5 px-1.5 py-0.5 font-sans text-[10px] text-fg-subtle">
+        <kbd className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 rounded border border-border bg-bg-subtle px-1.5 py-0.5 font-sans text-[10px] text-fg-subtle">
           ⌘P
         </kbd>
       )}
@@ -412,7 +412,7 @@ function ResizeHandle() {
       <div
         className={
           "absolute right-[3px] top-0 h-full w-px transition-colors " +
-          (active ? "bg-accent/70" : "bg-transparent group-hover:bg-white/20")
+          (active ? "bg-accent/70" : "bg-transparent group-hover:bg-border-strong")
         }
       />
     </div>

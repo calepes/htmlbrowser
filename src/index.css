@@ -22,6 +22,26 @@
   color-scheme: dark;
 }
 
+html.light {
+  --bg: 250 250 252;
+  --bg-subtle: 242 242 245;
+  --bg-muted: 232 232 237;
+  --bg-selected: 224 224 242;
+  --bg-topbar: 246 246 249;
+  --fg: 20 20 25;
+  --fg-warm: 40 36 30;
+  --fg-muted: 105 105 115;
+  --fg-subtle: 155 155 165;
+  --fg-topbar: 40 36 30;
+  --fg-topbar-muted: 105 105 115;
+  --border: 218 218 226;
+  --border-strong: 196 196 208;
+  --border-topbar: 218 218 226;
+  --accent: 22 163 74;
+  --warn: 217 119 6;
+  color-scheme: light;
+}
+
 html,
 body,
 #root {
